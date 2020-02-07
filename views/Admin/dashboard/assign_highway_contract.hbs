@@ -1,0 +1,61 @@
+    <div class="form-element-area" style="margin-bottom: 300px">
+        <div class="container">
+            
+<form action="/assign_highway_contracts" method="POST">
+{{!-- contracts:allContracts, allHighwayInspectors:users --}}
+
+
+
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="form-element-list mg-t-30">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-3 col-xs-12">
+                                <div class="nk-int-mk sl-dp-mn" >
+                                    <h2 style="margin-left:1px">Select User</h2>
+                                </div>
+                                <div class="chosen-select-act fm-cmp-mg">
+                                    <select class="chosen" name="user" data-placeholder="select user type">
+											
+                                         {{#each data.allHighwayInspectors}}
+											<option value={{this.id}},{{this.firstName}},{{this.lastName}}>{{this.firstName}}, {{this.lastName}}</option>
+                                        {{/each}}
+                   
+										</select>
+                                </div>
+                            </div>
+
+{{!-- contracts:allContracts, allHighwayInspectors:users --}}
+                             <div class="col-lg-6 col-md-6 col-sm-3 col-xs-12">
+                                <div class="nk-int-mk sl-dp-mn" >
+                                    <h2 style="margin-left:1px">Select Contract</h2>
+                                </div>
+                                <div class="chosen-select-act fm-cmp-mg">
+                                    <select class="chosen" name="contract" data-placeholder="select user type">
+                                        {{#each data.contracts}}
+											<option value={{this._id}}>{{this.projectTitle}}, {{this.state}}</option>
+                                        {{/each}}
+										</select>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="text-align:center">
+ <button class="btn notika-btn-green btn-reco-mg btn-button-mg" type="submit" style="width:40%; background-color:#00c292">
+     Assign Inpsector
+     </button>
+                 </div>
+                    </div>
+                    
+                </div>
+                
+            </div>
+            
+
+</form>
+
+
+        </div>
+    </div>

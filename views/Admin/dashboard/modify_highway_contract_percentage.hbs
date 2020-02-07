@@ -1,0 +1,64 @@
+    <div class="form-element-area" style="margin-bottom: 300px">
+        <div class="container">
+            
+<form action="/modify_highway_contract_percentage" method="POST">
+{{!-- contracts:allContracts, allHighwayInspectors:users --}}
+
+
+<script>
+    window.onload = function() {
+   
+    $('#selectField').change(function(){
+        let currentVal = JSON.parse($('#selectField').val())
+        console.log(currentVal)
+        $('#percentage').attr('value', currentVal.currentPercentage)
+        $('#percentage').attr('min', currentVal.currentPercentage)
+        $('#contract_id').attr('value', currentVal._id)
+    });
+
+}
+</script>
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="form-element-list mg-t-30">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-3 col-xs-12">
+                                <div class="nk-int-mk sl-dp-mn" >
+                                    <h2 style="margin-left:1px">Select Contract</h2>
+                                </div>
+                                <div class="chosen-select-act fm-cmp-mg">
+                                    <select id="selectField" class="chosen" name="contract" required data-placeholder="select user type">
+                                        {{#each data.contracts}}
+											<option value={{{json this}}}>{{this.projectTitle}}, {{this.state}}</option>
+                                        {{/each}}
+										</select>
+                                </div>
+                            </div>
+                             <div class="col-lg-6 col-md-6 col-sm-3 col-xs-12">
+                                <div class="form-group">
+                                    <div class="nk-int-st">
+                                            <label>Update Current Percentage</label>
+                                        <input id="percentage" name="percentage" type="number" required min="1" max="100" class="form-control input-lg" placeholder="Input Large">
+                                    </div>
+                                      <input id="contract_id" name="contract_id" type="hidden">
+                                </div>
+                            </div>
+
+                        </div>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="text-align:center">
+ <button class="btn notika-btn-green btn-reco-mg btn-button-mg" type="submit" style="width:40%; background-color:#00c292">
+     Update Current Percentage
+     </button>
+                 </div>
+                    </div>
+                    
+                </div>
+                
+            </div>
+            
+
+</form>
+
+
+        </div>
+    </div>

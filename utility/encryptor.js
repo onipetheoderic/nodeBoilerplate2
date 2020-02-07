@@ -20,3 +20,5 @@ exports.decrypt = (text) => {
  decrypted = Buffer.concat([decrypted, decipher.final()]);
  return decrypted.toString();
 }
+
+export const BASEURL = "http://localhost:4000"

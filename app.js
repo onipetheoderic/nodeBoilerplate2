@@ -5,6 +5,7 @@ const path = require("path");
 const fs = require("fs");
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
+var session = require('express-session');
 import lessMiddleware from 'less-middleware';
 import mongoose from 'mongoose';
 import hbs from 'hbs';

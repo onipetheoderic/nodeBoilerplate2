@@ -16,9 +16,13 @@ const filePlacerAndNamer = (req, res, the_file) => {
 }
 
 exports.home = function(req, res) {
+    redirector(req, res)
+    console.log("this is the session",req.session)
     res.render('Admin/dashboard/index', {layout: "layout/admin3"})
 }
 exports.login = function(req, res) {
+    
+    console.log("this is the session",req.session)
     res.render('Admin/dashboard/login-register', {layout: "layout/login-register", })
 }
 exports.register = function(req, res) {
@@ -30,9 +34,14 @@ exports.all_inspections = function(req, res) {
 exports.inspection_page = function(req, res) {
     res.render('Admin/dashboard/inspection_page', {layout: "layout/admin3"})
 }
-exports.inspection_page = function(req, res) {
+
+exports.mapview = function(req, res) {
     res.render('Admin/dashboard/map_view', {layout: "layout/admin3"})
 }
 exports.chart_page = function(req, res) {
     res.render('Admin/dashboard/chart', {layout: "layout/chatlayout"})
+}
+
+exports.report_page = function(req, res) {
+    res.render('Admin/dashboard/report', {layout: "layout/form"})
 }
