@@ -1,0 +1,128 @@
+<script>
+        $(document).ready(function(){
+            
+            console.log("I am what I am")
+var current_loc = window.location.href
+var parts = current_loc.split('/');
+var answer = parts[parts.length - 1];
+console.log(answer)
+
+
+            // $('td').dblclick(function(){
+            //     $(this).replaceWith("input[type='text']")
+            // })
+        });
+</script>
+
+<div class="container-fluid">
+
+    <input type="text" placeholder="Number of rows to generate" name="val_to_generate" id="val_to_generate">
+    <button  class="btn btn-primary waves-effect" onclick="myFunction()">Add More Rows</button>
+
+
+
+<style type="text/css">
+
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+th, td {
+  padding: 10px;
+}
+
+
+</style>
+<br>
+<br>
+<table id="myTable" width="430">
+    <thead>
+        <tr>
+
+        <th>Add multiple Inspection Type</th>   
+        
+        <th style="display:none;">School_id</th>
+
+        </tr>
+    </thead>
+    {{!-- <tbody> --}}
+  <tr id="table_format">
+    <td contenteditable='true'></td>
+    
+    <td style="display:none;">{{data.category}}</td>
+   
+  </tr>
+{{!-- </tbody> --}}
+  
+  
+</table>
+<br>
+
+<button class="btn btn-primary waves-effect" onclick="mySubmit2()">Submit</button>
+<br>
+<script>
+
+function myFunction() {
+    var values = document.getElementById("val_to_generate").value;
+    console.log(values)
+    var intifiedValue = parseInt(values)-1;
+    var itm = document.getElementById("table_format");
+    var  divClone;
+for(var i=0;i<intifiedValue;i++)
+ {
+   divClone = itm.cloneNode(true); // the true is for deep cloning
+   // document.body.appendChild(divClone);
+   document.getElementById("myTable").appendChild(divClone)
+ }
+
+}
+var myTab = document.getElementById("myTable")
+function mySubmit() {
+     console.log(tableToJSON(document.getElementById('myTable')));
+    // var current_location = window.location.href
+    // console.log(current_location)
+    // alert(current_location)
+}
+
+function mySubmit2(){   
+var table = document.getElementById("myTable");
+var tableArr = [];
+for ( var i = 1; i < table.rows.length; i++ ) {
+    if(table.rows[i].cells[0].textContent !=""){
+    tableArr.push({
+        name: table.rows[i].cells[0].textContent,
+        inspectionCategory: table.rows[i].cells[1].textContent
+    });
+    }
+}
+// First Name   Last Name   Middle Name     Sex     School Fees Paid
+console.log("this is the table data",tableArr)
+var xhttp = new XMLHttpRequest();
+xhttp.onreadystatechange = function() {
+    if(this.status == 200) {
+      alert("successfully saved to the db")
+      location.replace("/success_type")
+    }
+ };
+xhttp.open("POST", "/create_inpsector_type_post", true);
+xhttp.setRequestHeader("Content-Type", "application/json");
+xhttp.send(JSON.stringify(tableArr)); 
+//data: {cart:JSON.stringify(cart)},
+}
+
+function tableToJSON(table) {
+      var obj = {};
+      var row, rows = table.rows;
+      for (var i=0, iLen=rows.length; i<iLen; i++) {
+        row = rows[i];
+       console.log(row.textContent)
+      }
+     return JSON.stringify(obj);
+}
+
+
+</script>       
+           
+
+</div>

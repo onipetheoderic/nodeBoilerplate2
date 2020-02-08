@@ -4,6 +4,12 @@ import {redirector, admin_checker_redirector} from '../../utility/redirector'
 const fs = require("fs");
 import sha512 from 'sha512';
 
+import InspectionType from '../../models/InspectionType/inspectionType';
+import InspectionComponent from '../../models/Component/component';
+import Datasheet from '../../models/Datasheet/datasheet';
+import Component from '../../models/Component/component';
+import DatasheetComponent from '../../models/DatasheetComponent/datasheetComponent';
+
 var randomstring = require("randomstring");
 var Request = require("request");
 
@@ -41,19 +47,19 @@ exports.register_highway_inspector_post = function(req, res) {
                     console.log("Phone number not taken")//
             // var passwordhash = sha512(randomPassword)
             // const passwordhash = md5(passwordhash)
-            let user = new User();
+                let user = new User();
                 user.email = req.body.email;
                 user.firstName = req.body.firstName;
                 user.lastName = req.body.lastName;
                 user.password = randomPassword;
                 user.userType = req.body.userType;
-                user.isAdmin = false;   
-                user.phoneNumber = req.body.phone_number;     
-                user.save(function(err, auth_details){       
+                user.isAdmin = false;
+                user.phoneNumber = req.body.phone_number;
+                user.save(function(err, auth_details){
                     if(err){
                         res.render('Admin/dashboard/register_highway_inspector', {layout: "layout/register_highway", message:{error: "Error occured during user registration"} })
                         return;
-                    } else {                    
+                    } else {
                         res.render('Admin/dashboard/successpage', {layout: false, message:{successMessage: "User Successfully Registered", successDescription: `The Username is ${req.body.email}, while the Password is ${randomPassword}`} })
                     }
                 });
@@ -82,6 +88,8 @@ exports.view_all_contractors = function(req, res) {
         res.render('Admin/dashboard/view_all_contractors', {layout:false, datas:{contractors:all_records}})
     })
 }
+
+//Component
 
 
 exports.assign_highway_contracts = function(req, res) {
@@ -122,6 +130,107 @@ exports.default_dashboard = function(req, res){
     }
 }
 */ 
+exports.datasheet_select = function(req, res) {
+    redirector(req, res)
+    let decrypted_user_id = decrypt(req.session.user_id)
+    const myUrl = `${BASEURL}/user_contract/${decrypted_user_id}`
+    Request.get({url: myUrl}, (error, response, body) => {
+        // console.log("this is the response",response)
+        if(error) {
+            return console.log(error);
+        }
+        console.log(body)
+        console.log(JSON.parse(body));
+        const allContracts = JSON.parse(body)
+       
+        res.render('Admin/dashboard/datasheet_select', {layout: "layout/assign", data:{contracts:allContracts}})
+    });
+}
+/*
+  name: {type:String, required: true},
+    contract_id: String,
+    highway_inspector_id: String,
+*/ 
+//create_inspection_data_sheet
+
+exports.datasheet_inspection_type = function(req, res){
+    const datasheet_id = req.params.id
+    console.log("this is the datasheet_id", req.params.id)
+    /*InspectionTypeSchema = new mongoose.Schema({
+    name: {type:String, required: true},
+    inspectionCategory: String,*/ 
+    Datasheet.findOne({_id: req.params.id}, function(err, datasheet){
+        InspectionType.find({inspectionCategory:datasheet.project_type}, function(err, inspection_types){
+            res.render('Admin/dashboard/datasheet_inspection_type', {layout: "layout/assign", data:{datasheets:inspection_types}})
+        })
+    })
+}
+
+exports.inspection_report = function(req, res){
+    let inpsection_type = req.params.id;
+    // we get all component that belongs to the inspection type
+    Component.find({inspection_type_id: inpsection_type}, function(err, components){
+        //Now we have gotten the components, lets populate the forms with it
+    })
+//inspection_type_id
+    
+}
+
+
+
+exports.create_inspection_data_sheet = function(req, res){
+    redirector(req, res)
+    console.log("this is the user session",req.session)
+    let decrypted_user_id = decrypt(req.session.user_id)
+    Datasheet.findOne({contract_id:req.body.contract_id}, function(err, datasheet){
+        console.log("result off the query", datasheet)
+        if(datasheet===null){
+        /*
+          name: {type:String, required: true},
+    contract_id: String,
+    highway_inspector_id: String,
+    project_type: String,
+        */    
+                let datasheet = new Datasheet();
+                datasheet.name = req.body.name;
+                datasheet.contract_id = req.body.contract_id;
+                datasheet.highway_inspector_id = decrypted_user_id
+                datasheet.project_type = req.body.contract_type
+                datasheet.save(function(err, datasheet_details){       
+                    if(err){
+                       res.redirect("/datasheet_select")
+                        return;
+                    } else { 
+                       //we get everything that is related to the bridge by searching the component db
+                       res.redirect('/datasheet_inspection_type/'+ datasheet_details._id)
+                    }
+                });
+            /*
+             let user = new User();
+                user.email = req.body.email;
+                user.firstName = req.body.firstName;
+                user.lastName = req.body.lastName;
+                user.password = randomPassword;
+                user.userType = req.body.userType;
+                user.isAdmin = false;   
+                user.phoneNumber = req.body.phone_number;     
+                user.save(function(err, auth_details){       
+                    if(err){
+                        res.render('Admin/dashboard/register_highway_inspector', {layout: "layout/register_highway", message:{error: "Error occured during user registration"} })
+                        return;
+                    } else {                    
+                        res.render('Admin/dashboard/successpage', {layout: false, message:{successMessage: "User Successfully Registered", successDescription: `The Username is ${req.body.email}, while the Password is ${randomPassword}`} })
+                    }
+                });
+
+            */
+        }
+        else {
+            res.render('Admin/dashboard/datasheet_select', {layout: "layout/assign", data:{error:"Datasheet already exists for the user"}})
+        }
+    })
+}
+
 
 exports.modify_highway_contract_percentage = function(req, res){
     redirector(req, res)
@@ -205,11 +314,13 @@ exports.assign_highway_contracts_post = function(req, res) {
     //assign_highway_to_contract
    
 }
-
+// InspectionType
 
 exports.login = function(req, res) {
     res.render('Admin/dashboard/login-register', {layout: "layout/login-register", })
 }
+
+
 
 
 exports.login_post = function(req, res) {

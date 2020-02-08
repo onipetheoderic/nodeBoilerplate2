@@ -34,10 +34,50 @@ router.route('/assign_highway_contracts')
 router.route('/report_page')
     .get(AdminDashboardController.report_page)
 
+router.route('/create_inspection_component')
+    .get(AdminDashboardController.create_inspection_component)
+
+router.route('/create_inspection_type/:id')
+    .get(AdminDashboardController.create_inspection_type_get)
+
+router.route('/create_inpsector_type_post')
+    .post(AdminDashboardController.create_inpsector_type_post)
+
+router.route('/create_inspection_datasheet')
+    .get(AdminDashboardController.create_inspection_datasheet)
+
+router.route('/component_parent')
+    .get(AdminDashboardController.component_parent)
+
+router.route('/datasheet_select')
+    .get(AuthDashboard.datasheet_select)
+
+router.route('/datasheet_inspection_type/:id')
+    .get(AuthDashboard.datasheet_inspection_type)
+
+router.route('/inspection_category')
+    .get(AdminDashboardController.inspection_category )
+
+    //inspection_type
+router.route('/inspection_type/:id')
+    .get(AdminDashboardController.inspection_type)
+
+router.route('/create_component_type_post')
+    .post(AdminDashboardController.create_component_type_post)
+//create_component_type_post
+//component_category.hbs
 router.route('/modify_highway_contract_percentage')
     .get(AuthDashboard.modify_highway_contract_percentage)
     .post(AuthDashboard.modify_highway_contract_percentage_post)
 
 //all_inspections //inspection_page
+router.route('/success_type')
+    .get(AdminDashboardController.success_type)
+
+router.route('/success_component')
+    .get(AdminDashboardController.success_component)
+
+router.route('/create_inspection_data_sheet')
+    .post(AuthDashboard.create_inspection_data_sheet)   
 
 export default router;

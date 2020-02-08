@@ -1,0 +1,31 @@
+<!-- Main Menu area End-->
+    <!-- Start Status area -->
+    <div class="notika-status-area">
+        <div class="container">
+            <div class="row">
+<h2>Select Your Component Type</h2>
+{{#each data.inspection_type}}
+                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12" style="margin:20px">
+                    <div class="wb-traffic-inner notika-shadow sm-res-mg-t-30 tb-res-mg-t-30">
+                       <a href="/inspection_type/{{this._id}}">
+                        <div class="website-traffic-ctn">
+                            <h2>{{this.name}}</h2>
+                            <p style="font-size:11px">select {{this.name}}</p>
+                        </div>
+                        </a>
+                        <div class="sparkline-bar-stats1">9,4,8,6,5,6,4,8,3,5,9,5</div>
+                    </div>
+                </div>
+{{/each}}
+               
+
+
+
+            </div>
+
+        </div>
+    </div>
+    
+    <!-- End Email Statistic area-->
+    <!-- Start Realtime sts area-->
+    
