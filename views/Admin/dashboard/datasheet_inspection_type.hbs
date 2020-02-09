@@ -4,10 +4,15 @@
         <div class="container">
             <div class="row">
 <h2>Available Inspection Types For this Datasheet</h2>
+{{data.datasheet_details}}
 {{#each data.datasheets}}
+{{!-- datasheets:inspection_types, 
+                datasheet_id:req.params.id, 
+                contract_id:datasheet.contract_id, --}}
                 <div class="col-lg-5 col-md-6 col-sm-6 col-xs-12" style="margin:20px">
                     <div class="wb-traffic-inner notika-shadow sm-res-mg-t-30 tb-res-mg-t-30">
-                       <a href="/create_datasheet_component_and_types/{{this._id}}">
+                       <a href="/inspection_report/{{this._id}}/{{../data.datasheet_id}}">
+                       {{data.datasheet_details}}
                         <div class="website-traffic-ctn">
                             <h2>{{this.name}}</h2>
                             <p style="font-size:11px">create report for {{this.name}}</p>

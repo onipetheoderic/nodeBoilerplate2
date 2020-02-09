@@ -58,7 +58,16 @@ router.route('/datasheet_inspection_type/:id')
 router.route('/inspection_category')
     .get(AdminDashboardController.inspection_category )
 
-    //inspection_type
+router.route('/get_contract_datas/:contract_id')
+    .get(AuthDashboard.get_contract_datas)
+
+router.route('/inspection_report/:id/:datasheet_id')
+    .get(AuthDashboard.inspection_report)
+
+    //inspection_type  //create_datasheet_report_post
+router.route('/create_datasheet_report_post')
+    .post(AuthDashboard.create_datasheet_report_post)
+
 router.route('/inspection_type/:id')
     .get(AdminDashboardController.inspection_type)
 
