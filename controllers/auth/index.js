@@ -346,6 +346,7 @@ exports.login_post = function(req, res) {
     console.log("the email", email, password)
     // let passwordhash = sha512(req.body.password)
     User.findOne({email: email}, function(err, user) {
+        console.log("its working", user)
        if(user == null)
         {
            res.render('Admin/dashboard/login-register', {layout: "layout/login-register", message:{error: "Email not registered"}})
@@ -358,7 +359,7 @@ exports.login_post = function(req, res) {
                 console.log("this is the encId", encId)
                 req.session.user_id = encId;
                 console.log(req.session)
-                res.redirect("/")
+                res.render('Admin/dashboard/index', {layout: "layout/admin3"})
             }else{
                   // res.status(401).send('Invalid Password Key');
                   res.render('Admin/dashboard/login-register', {layout: "layout/login-register", message:{error: "invalid Email or password"}})
@@ -395,13 +396,13 @@ exports.register_post = function(req, res) {
                 user.email = req.body.email;
                 user.firstName = req.body.first_name;
                 user.lastName = req.body.last_name;
-                user.password = randomPassword;
+                user.password = req.body.password;
                 user.userType = req.body.user_type;
                 user.isAdmin = false;   
                 user.phoneNumber = req.body.phone_number;     
                 user.save(function(err, auth_details){       
                     if(err){
-                        res.render('Admin/dashboard/register_user', {layout: "layout/admin", message:{error: "Error occured during user registration"} })
+                        res.render('Admin/dashboard/login-register', {layout: "layout/admin", message:{error: "Error occured during user registration"} })
                         return;
                     } else {                    
                         res.render('Admin/dashboard/successpage', {layout: false, message:{successMessage: "User Successfully Registered", successDescription: `The Username is ${req.body.email}, while the Password is ${randomPassword}`} })
@@ -412,13 +413,13 @@ exports.register_post = function(req, res) {
         }
         else if(valss !=null){
               // console.log("Phone number taken")
-            res.render('Admin/dashboard/register_user', {layout: false, message:{error: "Phone Number has already been taken"} })
+            res.render('Admin/dashboard/login-register', {layout: false, message:{error: "Phone Number has already been taken"} })
 
         }
 
         else if(vals !=null){            
             // console.log("username taken")
-            res.render('Admin/dashboard/register_user', {layout: false, message:{error: "Email has already been taken"} })
+            res.render('Admin/dashboard/login-register', {layout: false, message:{error: "Email has already been taken"} })
             }
         })
         }

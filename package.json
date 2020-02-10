@@ -44,6 +44,7 @@
     "request": "^2.88.0",
     "sha1": "^1.1.1",
     "sha512": "0.0.1",
+    "simple-excel-to-json": "^2.2.1",
     "unirest": "^0.6.0"
   },
   "devDependencies": {

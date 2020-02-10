@@ -38,6 +38,7 @@
         <!-- Register -->
         <div class="nk-block" id="l-register">
             <center><h2>HIGHWAY MANAGEMENT SYSTEM</h2></center>
+        <form class="form-horizontal" id="my_reg" action="/register_post" method="POST" enctype="multipart/form-data">
             <div class="nk-form">
                 <div class="input-group">
                     <span class="input-group-addon nk-ic-st-pro"><i class="notika-icon notika-support"></i></span>
@@ -62,26 +63,17 @@
                 </div>
 
                 <div class="input-group mg-t-15">
-                    <span class="input-group-addon nk-ic-st-pro"><i class="notika-icon notika-mail"></i></span>
+                    <span class="input-group-addon nk-ic-st-pro"><i class="notika-icon notika-eye"></i></span>
                     <div class="nk-int-st">
-                        <input type="number" class="form-control" placeholder="Phone Number">
+                        <input type="password" type="password" class="form-control" name="password" placeholder="******">
                     </div>
                 </div>
-                <div class="bootstrap-select fm-cmp-mg">
-                    <select class="selectpicker">
-                        <option>Drama</option>
-                        <option>Cariska</option>
-                        <option>Cheriska</option>
-                        <option>Malias</option>
-                        <option>Kamines</option>
-                        <option>Austranas</option>
-                    </select>
-                </div>
+                
                
 
-                <a href="#l-login" data-ma-action="nk-login-switch" data-ma-block="#l-login" class="btn btn-login btn-success btn-float"><i class="notika-icon notika-right-arrow"></i></a>
+                <a href="javascript:document.getElementById('my_reg').submit();" class="btn btn-login btn-success btn-float"><i class="notika-icon notika-right-arrow"></i></a>
             </div>
-
+</form>
             <div class="nk-navigation rg-ic-stl">
                 <a href="#" data-ma-action="nk-login-switch" data-ma-block="#l-login"><i class="notika-icon notika-right-arrow"></i> <span>Sign in</span></a>
                 <a href="" data-ma-action="nk-login-switch" data-ma-block="#l-forget-password"><i>?</i> <span>Forgot Password</span></a>

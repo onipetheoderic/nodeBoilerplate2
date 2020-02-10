@@ -56,7 +56,7 @@ app.use(function(req, res, next){
     delete req.session.sessionFlash;
     next();
   });
-app.use(express.static(path.join(__dirname, 'Views/public')));//this is for the css and js files in the template folder
+app.use(express.static(path.join(__dirname, 'views/public')));//this is for the css and js files in the template folder
 
 
 // Express-validator MiddleWare copied from https://github.com/ctavan/express-validator/issues/238

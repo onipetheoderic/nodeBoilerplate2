@@ -23,6 +23,9 @@ router.route('/register_highway_inspector')
     .get(AuthDashboard.register_highway_inspector)
     .post(AuthDashboard.register_highway_inspector_post)
 
+router.route('/register_post')
+    .post(AuthDashboard.register_post)
+
 
 router.route('/all_inspections')
     .get(AdminDashboardController.all_inspections)
