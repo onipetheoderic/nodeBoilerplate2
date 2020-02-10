@@ -12,7 +12,7 @@ const router = express.Router();
 router.route('/')
     .get(AdminDashboardController.home)
 
-router.route('/app3')
+router.route('/')
     .get(AdminDashboardController.home)
 
 router.route('/login')
@@ -25,6 +25,10 @@ router.route('/register_highway_inspector')
 
 router.route('/register_post')
     .post(AuthDashboard.register_post)
+
+router.route('/upload_multiple_inspection_datasheet')
+    .get(AuthDashboard.upload_multiple_inspection_datasheet_get)
+    .post(AuthDashboard.upload_multiple_inspection_datasheet_post)
 
 
 router.route('/all_inspections')
@@ -53,6 +57,15 @@ router.route('/create_inpsector_type_post')
 router.route('/create_inspection_datasheet')
     .get(AdminDashboardController.create_inspection_datasheet)
 
+router.route('/upload_images_to_datasheet')
+    .get(AuthDashboard.upload_images_to_datasheet)
+
+router.route('/upload_images_to_datasheet_post')
+    .post(AuthDashboard.upload_images_to_datasheet_post)
+
+router.route('/upload_to_datasheet_post')
+    .post(AuthDashboard.upload_to_datasheet_post)
+
 router.route('/component_parent')
     .get(AdminDashboardController.component_parent)
 
@@ -61,6 +74,9 @@ router.route('/datasheet_select')
 
 router.route('/datasheet_inspection_type/:id')
     .get(AuthDashboard.datasheet_inspection_type)
+
+router.route('/edit_datasheet_report_post')
+    .post(AuthDashboard.edit_datasheet_report_post)
 
 router.route('/inspection_category')
     .get(AdminDashboardController.inspection_category )

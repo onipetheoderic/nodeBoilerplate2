@@ -1,3 +1,4 @@
+<div style="margin-bottom:30%">
 <script>
         $(document).ready(function(){
             
@@ -41,18 +42,23 @@ th, td {
         <tr>
 
         <th>Add multiple Inspection Component</th>   
+         <th>Value</th>   
         
       
 
         </tr>
     </thead>
     {{!-- <tbody> --}}
+  {{#each data.all_component}}
   <tr id="table_format">
-    <td contenteditable='true'></td>
-    
-     <td style="display:none;">{{data.mainType}}</td>
+      
+    <td contenteditable='true'>{{this.component_name}}</td>    
+    <td contenteditable="true">{{this.component_score}}</td>
+    <td contenteditable="true" style="display:none">{{../data.datasheet_id}}</td>
+    <td style="display:none">{{../data.highway_inspector_id}}</td>
    
   </tr>
+  {{/each}}
 {{!-- </tbody> --}}
   
   
@@ -75,7 +81,6 @@ for(var i=0;i<intifiedValue;i++)
    // document.body.appendChild(divClone);
    document.getElementById("myTable").appendChild(divClone)
  }
-
 }
 var myTab = document.getElementById("myTable")
 function mySubmit() {
@@ -91,8 +96,10 @@ var tableArr = [];
 for ( var i = 1; i < table.rows.length; i++ ) {
     if(table.rows[i].cells[0].textContent !=""){
     tableArr.push({
-        name: table.rows[i].cells[0].textContent,
-        inspection_type_id: table.rows[i].cells[1].textContent,
+        component_name: table.rows[i].cells[0].textContent,
+        component_score: table.rows[i].cells[1].textContent,
+        datasheet_id: table.rows[i].cells[2].textContent,
+        highway_inspector_id: table.rows[i].cells[3].textContent,
     });
     }
 }
@@ -105,13 +112,19 @@ var xhttp = new XMLHttpRequest();
         location.replace("/success_component")
  }
   };
- xhttp.open("POST", "/create_component_type_post", true);
- xhttp.setRequestHeader("Content-Type", "application/json");
- xhttp.send(JSON.stringify(tableArr));
+xhttp.open("POST", "/edit_datasheet_report_post", true);
+xhttp.setRequestHeader("Content-Type", "application/json");
+xhttp.send(JSON.stringify(tableArr));
 
 //data: {cart:JSON.stringify(cart)},
 }
-
+/*
+datasheet_id: {type:String, required: true},
+    contract_id: {type:String, required: true},
+    component_id: {type:String, required: true},
+    component_name: {type:String, required: true},
+    component_score: {type:Number, default:0},
+*/ 
 function tableToJSON(table) {
       var obj = {};
       var row, rows = table.rows;
@@ -126,4 +139,5 @@ function tableToJSON(table) {
 </script>       
            
 
+</div>
 </div>

@@ -40,6 +40,7 @@ exports.inspection_page = function(req, res) {
 exports.datasheet_inspection_type = function(req, res) {
     res.render('Admin/dashboard/datasheet_inspection_type', {layout:"layout/admin3"})
 }
+
 /*
 router.route('/create_inspection_type')
     .get(AdminDashboardController.create_inspection_type)

@@ -4,6 +4,7 @@ var DatasheetSchema = new mongoose.Schema({
     contract_id: String,
     highway_inspector_id: String,
     project_type: String,
+    images: Array,
 },{
     timestamps: true//this will automatically add the createdAt and the updatedAt field for us
 });

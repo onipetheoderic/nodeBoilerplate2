@@ -8,18 +8,15 @@ import InspectionType from '../../models/InspectionType/inspectionType';
 import InspectionComponent from '../../models/Component/component';
 import Datasheet from '../../models/Datasheet/datasheet';
 import Component from '../../models/Component/component';
+import Image from '../../models/Image/image';
 import DatasheetComponent from '../../models/DatasheetComponent/datasheetComponent';
-
+var parser = require('simple-excel-to-json')
 var randomstring = require("randomstring");
 var Request = require("request");
 
-const filePlacerAndNamer = (req, res, the_file) => {
-    // let file_name = the_file.name
-    let file_name = Date.now()+ the_file.name
-    the_file.mv('views/public/uploads/' + file_name, function(err) {
-   });
-    return file_name
-}
+const excelToJson = require('convert-excel-to-json');
+ 
+var excel2json = require("excel-to-json");
 
 const dashboardMsg = (type, msg) => {
     if(type=="error"){
@@ -133,19 +130,20 @@ exports.datasheet_select = function(req, res) {
         if(error) {
             return console.log(error);
         }
-        console.log(body)
-        console.log(JSON.parse(body));
+      
+        console.log("this is the parsed Body",body)
+        console.log("this is the parsed Body",JSON.parse(body));
         const allContracts = JSON.parse(body)
-       
-        res.render('Admin/dashboard/datasheet_select', {layout: "layout/assign", data:{contracts:allContracts}})
+        const dataPresence = allContracts.length === 0 ? false : true
+        console.log("this si the data presence",dataPresence)
+        res.render('Admin/dashboard/datasheet_select', {layout: "layout/assign", data:{contracts:allContracts, dataPresence:dataPresence }})
     });
 }
 
 exports.datasheet_inspection_type = function(req, res){
     const datasheet_id = req.params.id
-    console.log("this is the datasheet_id", req.params.id)
-    
     Datasheet.findOne({_id: req.params.id}, function(err, datasheet){
+        console.log("this is the detailas of the datasheet", datasheet)
         InspectionType.find({inspectionCategory:datasheet.project_type}, function(err, inspection_types){
             console.log("this si the datasheet",datasheet)
             res.render('Admin/dashboard/datasheet_inspection_type', {layout: "layout/assign", 
@@ -165,6 +163,31 @@ exports.create_datasheet_report_post = function(req, res){
     });
 }
 
+exports.edit_datasheet_report_post = function(req, res){
+    console.log("this is the body of the Ajax call",req.body)
+    console.log("single document", req.body[0].datasheet_id)
+   
+    DatasheetComponent.deleteMany({datasheet_id: req.body[0].datasheet_id}, function (err) {
+        if(err){
+             res.status(200).json(docs);
+        }
+        else {
+            DatasheetComponent.insertMany(req.body, function (err, docs) {
+                if (err){
+                    return console.error(err);
+                    res.status(400).json(err);
+                } else {       
+                  res.status(200).json(docs);
+                }
+            });
+        }
+      
+    
+})
+}
+
+
+
 exports.inspection_report = function(req, res){
     console.log("route reached")
     redirector(req, res)
@@ -173,12 +196,23 @@ exports.inspection_report = function(req, res){
     let datasheet_id = req.params.datasheet_id
     console.log(datasheet_id)
     // we get all component that belongs to the inspection type
-    Component.find({inspection_type_id: inpsection_type}, function(err, components){
-        console.log("this are the component", components)
-        //Now we have gotten the components, lets populate the forms with it
-        res.render('Admin/dashboard/inspection_report', {layout: "layout/admin3", data:{all_component: components, highway_inspector_id:decrypted_user_id, datasheet_id:datasheet_id}})
-    })// //inspection_type_id
-    
+    DatasheetComponent.findOne({datasheet_id: datasheet_id}, function(err, datasheetComponent){        
+                    
+            if(datasheetComponent===null){
+                Component.find({inspection_type_id: inpsection_type}, function(err, components){
+               
+                res.render('Admin/dashboard/inspection_report', {layout: "layout/admin3", data:{all_component: components, highway_inspector_id:decrypted_user_id, datasheet_id:datasheet_id}})
+            })// //in
+            }
+            else {
+                DatasheetComponent.find({datasheet_id: datasheet_id}, function(err, datasheetComponentAll){
+                console.log("this are all the datasheets", datasheetComponent)
+                res.render('Admin/dashboard/edit_component_report', {layout: "layout/admin3", data:{all_component: datasheetComponentAll, highway_inspector_id:decrypted_user_id, datasheet_id:datasheet_id}})
+            })
+            }
+           
+    })
+
 }
 
 
@@ -191,6 +225,7 @@ exports.create_inspection_data_sheet = function(req, res){
 
         console.log("result off the query", datasheet)
         if(datasheet===null){
+            console.log("++++++++++++++++++No datasheet is existing creating a new one")
                 let datasheet = new Datasheet();
                 datasheet.name = req.body.name;
                 datasheet.contract_id = req.body.contract_id;
@@ -209,6 +244,7 @@ exports.create_inspection_data_sheet = function(req, res){
         }
         else {
             Datasheet.findOne({contract_id:req.body.contract_id}, function(err, existingDatasheet){
+                console.log("++++++++++++++++++++++++Already esisting datashit")
                 res.redirect('/datasheet_inspection_type/'+ existingDatasheet._id)
             })
             
@@ -359,7 +395,8 @@ exports.login_post = function(req, res) {
                 console.log("this is the encId", encId)
                 req.session.user_id = encId;
                 console.log(req.session)
-                res.render('Admin/dashboard/index', {layout: "layout/admin3"})
+                // res.render('Admin/dashboard/index', {layout: "layout/admin3"})
+                res.redirect("/")
             }else{
                   // res.status(401).send('Invalid Password Key');
                   res.render('Admin/dashboard/login-register', {layout: "layout/login-register", message:{error: "invalid Email or password"}})
@@ -375,6 +412,82 @@ exports.logout = function(req, res){
    res.redirect('/')                
 }
 
+exports.upload_multiple_inspection_datasheet_get = function(req, res){
+    res.render('Admin/dashboard/upload_multiple_inspection_datasheet', {layout: "layout/admin3"})
+}
+
+
+exports.upload_images_to_datasheet = function(req, res){
+    redirector(req, res)
+    let decrypted_user_id = decrypt(req.session.user_id)
+    Datasheet.find({highway_inspector_id:decrypted_user_id}, function(err, datasheets){
+        res.render('Admin/dashboard/upload_multiple_images_inspection_datasheet', {layout: "layout/admin3", data:{datasheets:datasheets}})
+    })
+  
+}
+//Upload supporting images for inspections
+
+
+
+const filePlacerAndNamer = (req, res, the_file) => {
+    // let file_name = the_file.name
+    let file_name = Date.now()+ the_file.name;
+    
+    the_file.mv('views/public/uploads/' + file_name, function(err) {
+   });
+    return file_name
+}
+/* highway_inspector_id: {type:String, required: true},
+    datasheet_id: [{ type: Schema.Types.ObjectId, ref: 'Datasheet' }],
+    images: {type:String, required: true},*/
+var myArray = []
+var myId = []
+exports.upload_images_to_datasheet_post = function(req, res){
+    console.log("the body of the file", req.body.datasheet_id)
+    myId.push(req.body.datasheet_id)
+    let incoming_file_name = filePlacerAndNamer(req, res, req.files.file);
+    myArray.push(incoming_file_name)
+    console.log("this are the files", incoming_file_name, myArray)
+}
+
+exports.upload_to_datasheet_post = function(req, res){
+    console.log("alllllllllll", req)
+    Datasheet.findByIdAndUpdate(req.body.datasheet_id,
+        {images:myArray}).exec(function(err, updated_staff){
+            if(err) {
+               console.log(err);
+               
+            } else {
+                console.log(updated_staff)
+            let image = new Image()
+            image.datasheet_id =req.body.datasheet_id;
+            image.images = myArray;
+            image.save(function(err, auth_details){       
+                if(err){
+                   console.log("Not saved")
+                } else {                    
+                    res.redirect('/')
+                }
+            });
+        }
+    });
+
+}
+
+exports.upload_multiple_inspection_datasheet_post = function(req, res){
+    
+     console.log(req.files.file)
+    // dropzone queries it multiple times, that is its auto submit
+    // var files = [].concat(req.files.data);
+    // console.log("this are the files", files);
+
+
+    var doc = parser.parseXls2Json(req.files.file.data); 
+    console.log("this is the uploaded doc", doc)
+    let incoming_file_name = filePlacerAndNamer(req, res, req.files.file);
+    console.log(incoming_file_name)
+
+}
 
 
 

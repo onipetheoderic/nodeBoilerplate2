@@ -1,0 +1,247 @@
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Form Components | Highway management system</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- favicon
+		============================================ -->
+    <link rel="shortcut icon" type="image/x-icon" href="/Admin/assets/img/favicon.ico">
+    <!-- Google Fonts
+		============================================ -->
+    <link href="/Admin/assets/https://fonts.googleapis.com/css?family=Roboto:100,300,400,700,900" rel="stylesheet">
+    <!-- Bootstrap CSS
+		============================================ -->
+    <link rel="stylesheet" href="/Admin/assets/css/bootstrap.min.css">
+    <!-- font awesome CSS
+		============================================ -->
+    <link rel="stylesheet" href="/Admin/assets/css/font-awesome.min.css">
+    <!-- owl.carousel CSS
+		============================================ -->
+    <link rel="stylesheet" href="/Admin/assets/css/owl.carousel.css">
+    <link rel="stylesheet" href="/Admin/assets/css/owl.theme.css">
+    <link rel="stylesheet" href="/Admin/assets/css/owl.transitions.css">
+    <!-- meanmenu CSS
+		============================================ -->
+    <link rel="stylesheet" href="/Admin/assets/css/meanmenu/meanmenu.min.css">
+    <!-- animate CSS
+		============================================ -->
+    <link rel="stylesheet" href="/Admin/assets/css/animate.css">
+    <!-- summernote CSS
+		============================================ -->
+    <link rel="stylesheet" href="/Admin/assets/css/summernote/summernote.css">
+    <!-- Range Slider CSS
+		============================================ -->
+    <link rel="stylesheet" href="/Admin/assets/css/themesaller-forms.css">
+    <!-- normalize CSS
+		============================================ -->
+    <link rel="stylesheet" href="/Admin/assets/css/normalize.css">
+    <!-- mCustomScrollbar CSS
+		============================================ -->
+    <link rel="stylesheet" href="/Admin/assets/css/scrollbar/jquery.mCustomScrollbar.min.css">
+    <!-- Notika icon CSS
+		============================================ -->
+    <link rel="stylesheet" href="/Admin/assets/css/notika-custom-icon.css">
+    <!-- bootstrap select CSS
+		============================================ -->
+    <link rel="stylesheet" href="/Admin/assets/css/bootstrap-select/bootstrap-select.css">
+    <!-- datapicker CSS
+		============================================ -->
+    <link rel="stylesheet" href="/Admin/assets/css/datapicker/datepicker3.css">
+    <!-- Color Picker CSS
+		============================================ -->
+    <link rel="stylesheet" href="/Admin/assets/css/color-picker/farbtastic.css">
+    <!-- main CSS
+		============================================ -->
+    <link rel="stylesheet" href="/Admin/assets/css/chosen/chosen.css">
+    <!-- notification CSS
+		============================================ -->
+    <link rel="stylesheet" href="/Admin/assets/css/notification/notification.css">
+    <!-- dropzone CSS
+		============================================ -->
+    <link rel="stylesheet" href="/Admin/assets/css/dropzone/dropzone.css">
+    <!-- wave CSS
+		============================================ -->
+    <link rel="stylesheet" href="/Admin/assets/css/wave/waves.min.css">
+    <!-- main CSS
+		============================================ -->
+    <link rel="stylesheet" href="/Admin/assets/css/main.css">
+    <!-- style CSS
+		============================================ -->
+    <link rel="stylesheet" href="/Admin/assets/style.css">
+    <!-- responsive CSS
+		============================================ -->
+    <link rel="stylesheet" href="/Admin/assets/css/responsive.css">
+    <!-- modernizr JS
+		============================================ -->
+    <script src="/Admin/assets/js/vendor/modernizr-2.8.3.min.js"></script>
+</head>
+
+<body>
+    <!--[if lt IE 8]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="/Admin/assets/http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+    <!-- Start Header Top Area -->
+
+    <!-- Summernote area End-->
+    <!-- Dropzone area Start-->
+    <div class="dropzone-area" style="margin-bottom:30%">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="dropdone-nk mg-t-30">
+                        <div class="cmp-tb-hd">
+                            
+                            <h2>Drag and Drop File Uploader</h2>
+                            <p>Find in the camera the superstructural picture evidence of the thicked boxes
+Pictures can be extracted from the numbered camera pictures in DC1803 to DC 1085</p>
+                        </div>
+                        
+            <div id="dropzone1" class="multi-uploader-cs">
+                <form action="/upload_images_to_datasheet_post" method="POST" enctype="multipart/form-data" class="dropzone dropzone-nk needsclick" id="demo1-upload">
+                        <div class="chosen-select-act fm-cmp-mg" style="margin-bottom:50px">
+                        <h2>Select A DataSet</h2>
+                        <select class="chosen" required name="datasheet_id" data-placeholder="select user type">
+                                
+                            {{#each data.datasheets}}
+                                <option value={{this.id}}>{{this.name}}</option>
+                            {{/each}}
+        
+                            </select>
+                    </div>
+                    
+                    <div class="dz-message needsclick download-custom">
+                        <input type="hidden" name="datasheet_pix">
+                        <i class="notika-icon notika-cloud"></i>
+                        <h2>Drop files here or click to upload.</h2>
+                    
+                        </p>
+                    </div>
+                </form>
+
+                <form action="/upload_to_datasheet_post" method="POST">
+                    <h2>Confirm Datasheet</h2>
+                    <select class="chosen" required name="datasheet_id" data-placeholder="select user type">
+                                
+                            {{#each data.datasheets}}
+                                <option value={{this.id}}>{{this.name}}</option>
+                            {{/each}}
+        
+                    </select>
+                    <button type="submit">Submit</button>
+                </form>
+            </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+      
+    <!-- End Footer area-->
+    <!-- jquery
+		============================================ -->
+   <script src="/Admin/assets/js/vendor/jquery-1.12.4.min.js"></script>
+    <!-- bootstrap JS
+		============================================ -->
+    <script src="/Admin/assets/js/bootstrap.min.js"></script>
+    <!-- wow JS
+		============================================ -->
+    <script src="/Admin/assets/js/wow.min.js"></script>
+    <!-- price-slider JS
+		============================================ -->
+    <script src="/Admin/assets/js/jquery-price-slider.js"></script>
+    <!-- owl.carousel JS
+		============================================ -->
+    <script src="/Admin/assets/js/owl.carousel.min.js"></script>
+    <!-- scrollUp JS
+		============================================ -->
+    <script src="/Admin/assets/js/jquery.scrollUp.min.js"></script>
+    <!-- meanmenu JS
+		============================================ -->
+    <script src="/Admin/assets/js/meanmenu/jquery.meanmenu.js"></script>
+    <!-- counterup JS
+		============================================ -->
+    <script src="/Admin/assets/js/counterup/jquery.counterup.min.js"></script>
+    <script src="/Admin/assets/js/counterup/waypoints.min.js"></script>
+    <script src="/Admin/assets/js/counterup/counterup-active.js"></script>
+    <!-- mCustomScrollbar JS
+		============================================ -->
+    <script src="/Admin/assets/js/scrollbar/jquery.mCustomScrollbar.concat.min.js"></script>
+    <!-- sparkline JS
+		============================================ -->
+    <script src="/Admin/assets/js/sparkline/jquery.sparkline.min.js"></script>
+    <script src="/Admin/assets/js/sparkline/sparkline-active.js"></script>
+    <!-- flot JS
+		============================================ -->
+    <script src="/Admin/assets/js/flot/jquery.flot.js"></script>
+    <script src="/Admin/assets/js/flot/jquery.flot.resize.js"></script>
+    <script src="/Admin/assets/js/flot/flot-active.js"></script>
+    <!-- knob JS
+		============================================ -->
+    <script src="/Admin/assets/js/knob/jquery.knob.js"></script>
+    <script src="/Admin/assets/js/knob/jquery.appear.js"></script>
+    <script src="/Admin/assets/js/knob/knob-active.js"></script>
+    <!-- Input Mask JS
+		============================================ -->
+    <script src="/Admin/assets/js/jasny-bootstrap.min.js"></script>
+    <!-- icheck JS
+		============================================ -->
+    <script src="/Admin/assets/js/icheck/icheck.min.js"></script>
+    <script src="/Admin/assets/js/icheck/icheck-active.js"></script>
+    <!-- rangle-slider JS
+		============================================ -->
+    <script src="/Admin/assets/js/rangle-slider/jquery-ui-1.10.4.custom.min.js"></script>
+    <script src="/Admin/assets/js/rangle-slider/jquery-ui-touch-punch.min.js"></script>
+    <script src="/Admin/assets/js/rangle-slider/rangle-active.js"></script>
+    <!-- datapicker JS
+		============================================ -->
+    <script src="/Admin/assets/js/datapicker/bootstrap-datepicker.js"></script>
+    <script src="/Admin/assets/js/datapicker/datepicker-active.js"></script>
+    <!-- bootstrap select JS
+		============================================ -->
+    <script src="/Admin/assets/js/bootstrap-select/bootstrap-select.js"></script>
+    <!--  color-picker JS
+		============================================ -->
+    <script src="/Admin/assets/js/color-picker/farbtastic.min.js"></script>
+    <script src="/Admin/assets/js/color-picker/color-picker.js"></script>
+    <!--  notification JS
+		============================================ -->
+    <script src="/Admin/assets/js/notification/bootstrap-growl.min.js"></script>
+    <script src="/Admin/assets/js/notification/notification-active.js"></script>
+    <!--  summernote JS
+		============================================ -->
+    <script src="/Admin/assets/js/summernote/summernote-updated.min.js"></script>
+    <script src="/Admin/assets/js/summernote/summernote-active.js"></script>
+    <!-- dropzone JS
+		============================================ -->
+    <script src="/Admin/assets/js/dropzone/dropzone.js"></script>
+    <!--  wave JS
+		============================================ -->
+    <script src="/Admin/assets/js/wave/waves.min.js"></script>
+    <script src="/Admin/assets/js/wave/wave-active.js"></script>
+    <!--  chosen JS
+		============================================ -->
+    <script src="/Admin/assets/js/chosen/chosen.jquery.js"></script>
+    <!--  Chat JS
+		============================================ -->
+    <script src="/Admin/assets/js/chat/jquery.chat.js"></script>
+    <!--  todo JS
+		============================================ -->
+    <script src="/Admin/assets/js/todo/jquery.todo.js"></script>
+    <!-- plugins JS
+		============================================ -->
+    <script src="/Admin/assets/js/plugins.js"></script>
+    <!-- main JS
+		============================================ -->
+    <script src="/Admin/assets/js/main.js"></script>
+	<!-- tawk chat JS
+		============================================ -->
+    <script src="/Admin/assets/js/tawk-chat.js"></script>
+</body>
+
+</html>

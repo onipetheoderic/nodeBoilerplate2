@@ -1,7 +1,7 @@
     <div class="form-element-area" style="margin-bottom: 300px">
         <div class="container">
             
-<form action="/modify_highway_contract_percentage" method="POST">
+
 {{!-- contracts:allContracts, allHighwayInspectors:users --}}
 
 
@@ -18,14 +18,21 @@
 
 }
 </script>
-            <div class="row">
+            <div class="row" style="margin-bottom:150px">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="form-element-list mg-t-30">
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sm-6 col-xs-12">
                                 <div class="nk-int-mk sl-dp-mn" >
-                                     <h2 style="margin-left:1px">You are currently Assigned to the following Contracts</h2>
+                                    {{#if dataPresence}}
+                                    <h2 style="margin-left:1px">You are currently Assigned to the following Contracts</h2>
                                     <h2 style="margin-left:1px">Click a Contract and Create a Datasheet for it</h2>
+
+                                    {{else}}
+                                     <h2 style="margin-left:1px">You are currently Not Assigned to Any Contracts</h2>
+                                   
+                                    {{/if}}
+                                    
                                     {{#each data.contracts}}
                                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12" style="margin:20px">
                                             <div class="wb-traffic-inner notika-shadow sm-res-mg-t-30 tb-res-mg-t-30">
@@ -60,29 +67,17 @@
                                 </div>
                                                     <p style="font-size:11px">Click to create Inspection datasheet</p>
                                                 </div>
-                                              
                                                 <div class="sparkline-bar-stats1">9,4,8,6,5,6,4,8,3,5,9,5</div>
                                             </div>
                                         </div>
                                     {{/each}}
                                 </div>
-
-                                
                             </div>
-                             
-
                         </div>
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="text-align:center">
    </div>
                     </div>
-                    
                 </div>
-                
             </div>
-            
-
-</form>
-
-
-        </div>
+    </div>
     </div>
