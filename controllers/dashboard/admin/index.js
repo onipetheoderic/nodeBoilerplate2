@@ -21,7 +21,7 @@ const filePlacerAndNamer = (req, res, the_file) => {
 exports.home = function(req, res) {
     redirector(req, res)
     console.log("this is the session",req.session)
-    let decrypted_user_id = decrypt(req.session.user_id)
+    let decrypted_user_id = decrypt(req.session.user_id, req, res)
     User.findOne({_id:decrypted_user_id}, function(err, user){
         console.log(user.userType)
         const superAdmin = user.userType ==="superAdmin"?true:false;

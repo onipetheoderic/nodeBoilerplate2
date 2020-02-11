@@ -40,6 +40,9 @@ router.route('/view_sent_messages_get')
 router.route('/all_highway_inspectors')
     .get(AuthDashboard.all_highway_inspectors)
 
+router.route('/view_inspections')
+    .get(AuthDashboard.view_inspections)
+
 router.route('/read_messages_get/:id')
     .get(AuthDashboard.read_messages_get)
 
@@ -122,6 +125,9 @@ router.route('/success_component')
     .get(AdminDashboardController.success_component)
 
 router.route('/create_inspection_data_sheet')
-    .post(AuthDashboard.create_inspection_data_sheet)   
+    .post(AuthDashboard.create_inspection_data_sheet)
+
+router.route('/logout')
+    .get(AuthDashboard.logout)
 
 export default router;

@@ -126,7 +126,7 @@ name: "Site Clearance", inspection_type_id: "10"}
 
 exports.datasheet_select = function(req, res) {
     redirector(req, res)
-    let decrypted_user_id = decrypt(req.session.user_id)
+    let decrypted_user_id = decrypt(req.session.user_id, req, res)
     const myUrl = `${BASEURL}/user_contract/${decrypted_user_id}`
     Request.get({url: myUrl}, (error, response, body) => {
         // console.log("this is the response",response)
@@ -172,9 +172,13 @@ exports.read_messages_get = function(req, res){
     })
 }
 
+exports.view_inspections = function(req, res){
+    res.render('Admin/dashboard/view_inspections', {layout: "layout/admin3"})
+}
+
 exports.message_inspector_get = function(req, res){
 redirector(req, res)
-    let decrypted_user_id = decrypt(req.session.user_id)
+    let decrypted_user_id = decrypt(req.session.user_id, req, res)
     User.findOne({_id:decrypted_user_id}, function(err, user){
         if(user.userType === "siteEngineer"){
             User.find({userType:"director"}, function(err, directors){
@@ -210,7 +214,7 @@ redirector(req, res)
 exports.message_inspector_post = function(req, res){
     console.log("message post", req.body)
     redirector(req, res)
-    let decrypted_user_id = decrypt(req.session.user_id)
+    let decrypted_user_id = decrypt(req.session.user_id, req, res)
     let message = new Message();
     message.senderId = decrypted_user_id;
     message.recieverId = req.body.recieverId;
@@ -228,7 +232,7 @@ exports.message_inspector_post = function(req, res){
 
 exports.view_sent_messages_get = function(req, res) {
     redirector(req, res)
-    let decrypted_user_id = decrypt(req.session.user_id)
+    let decrypted_user_id = decrypt(req.session.user_id, req, res)
     Message.find({recieverId:decrypted_user_id}, function(err, msgs){
         let msgCount = msgs.length
     Message.find({senderId:decrypted_user_id}, function(err, sentMsgs){
@@ -265,7 +269,7 @@ exports.edit_datasheet_report_post = function(req, res){
 exports.inspection_report = function(req, res){
     console.log("route reached")
     redirector(req, res)
-    let decrypted_user_id = decrypt(req.session.user_id)
+    let decrypted_user_id = decrypt(req.session.user_id, req, res)
     let inpsection_type = req.params.id;
     let datasheet_id = req.params.datasheet_id
     console.log(datasheet_id)
@@ -294,7 +298,7 @@ exports.inspection_report = function(req, res){
 exports.create_inspection_data_sheet = function(req, res){
     redirector(req, res)
     console.log("this is the user session",req.session)
-    let decrypted_user_id = decrypt(req.session.user_id)
+    let decrypted_user_id = decrypt(req.session.user_id, req, res)
     Datasheet.findOne({contract_id:req.body.contract_id}, function(err, datasheet){
 
         console.log("result off the query", datasheet)
@@ -362,7 +366,7 @@ exports.get_contract_datas = function(req, res) {
 exports.modify_highway_contract_percentage = function(req, res){
     redirector(req, res)
     console.log("this is the user session",req.session)
-    let decrypted_user_id = decrypt(req.session.user_id)
+    let decrypted_user_id = decrypt(req.session.user_id, req, res)
     //sends a post request, with the user id as a parameter and gets all the contract he is managign
     const myUrl = `${BASEURL}/user_contract/${decrypted_user_id}`
     Request.get({url: myUrl}, (error, response, body) => {
@@ -381,7 +385,7 @@ exports.modify_highway_contract_percentage = function(req, res){
 exports.modify_highway_contract_percentage_post = function(req, res){
     redirector(req, res)
     const myUrl = `${BASEURL}/modify_percentage_of_highway_contract`
-    let decrypted_user_id = decrypt(req.session.user_id)
+    let decrypted_user_id = decrypt(req.session.user_id, req, res)
     console.log("this is the decrypted user_id",decrypted_user_id)
     console.log("this is the parameters sent", req.body)
     let currentPercentage = req.body.percentage;
@@ -493,7 +497,7 @@ exports.upload_multiple_inspection_datasheet_get = function(req, res){
 
 exports.upload_images_to_datasheet = function(req, res){
     redirector(req, res)
-    let decrypted_user_id = decrypt(req.session.user_id)
+    let decrypted_user_id = decrypt(req.session.user_id, req, res)
     Datasheet.find({highway_inspector_id:decrypted_user_id}, function(err, datasheets){
         res.render('Admin/dashboard/upload_multiple_images_inspection_datasheet', {layout: "layout/admin3", data:{datasheets:datasheets}})
     })
@@ -565,6 +569,13 @@ exports.upload_multiple_inspection_datasheet_post = function(req, res){
 
 }
 
+
+exports.logout = function(req, res){
+    req.session.destroy();  
+     res.redirect('/login')                
+  
+  }
+  
 exports.all_highway_inspectors = function(req, res){
     User.find({userType:"siteEngineer"}, function(err, engineers){
         res.render('Admin/dashboard/all_highway_inspectors', {layout: "layout/data_layout", data:{engineers:engineers} })
