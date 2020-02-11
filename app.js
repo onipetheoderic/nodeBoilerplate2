@@ -209,12 +209,7 @@ hbs.registerHelper('ifCond', function(v1, v2, options) {
   return options.inverse(this);
 });
 
-hbs.registerHelper('ifCond', function(v1, v2, options) {
-  if(v1 >= v2) {
-    return options.fn(this);
-  }
-  return options.inverse(this);
-});
+
 
 hbs.registerHelper('compare', function(v1, v2, options) {
   if(v1 >= v2) {
