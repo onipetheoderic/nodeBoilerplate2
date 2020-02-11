@@ -21,5 +21,5 @@ exports.decrypt = (text) => {
  return decrypted.toString();
 }
 
-export const BASEURL = "http://178.62.55.64:4000"
+export const BASEURL = "http://localhost:4000"
 //"http://178.62.55.64:4000"

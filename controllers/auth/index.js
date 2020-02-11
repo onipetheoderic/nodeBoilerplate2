@@ -10,6 +10,7 @@ import Datasheet from '../../models/Datasheet/datasheet';
 import Component from '../../models/Component/component';
 import Image from '../../models/Image/image';
 import DatasheetComponent from '../../models/DatasheetComponent/datasheetComponent';
+import Message from '../../models/Message/message';
 var parser = require('simple-excel-to-json')
 var randomstring = require("randomstring");
 var Request = require("request");
@@ -48,6 +49,8 @@ exports.register_highway_inspector_post = function(req, res) {
                 user.email = req.body.email;
                 user.firstName = req.body.firstName;
                 user.lastName = req.body.lastName;
+                user.phoneNumber = req.body.phoneNumber;
+                user.gender = req.body.gender;
                 user.password = randomPassword;
                 user.userType = req.body.userType;
                 user.isAdmin = false;
@@ -161,6 +164,77 @@ exports.create_datasheet_report_post = function(req, res){
           res.status(200).json(docs);
         }
     });
+}
+
+exports.read_messages_get = function(req, res){
+    Message.findOne({_id:req.params.id}, function(err, msg){
+        res.render('Admin/dashboard/read_message', {layout: "layout/admin3", data:{msg:msg}})
+    })
+}
+
+exports.message_inspector_get = function(req, res){
+redirector(req, res)
+    let decrypted_user_id = decrypt(req.session.user_id)
+    User.findOne({_id:decrypted_user_id}, function(err, user){
+        if(user.userType === "siteEngineer"){
+            User.find({userType:"director"}, function(err, directors){
+                console.log("from the directors", directors)
+                res.render('Admin/dashboard/message_inspector_get', {layout: "layout/admin3", data:{directors:directors, sentMsgCount:sentMsgCount, inboxCount:msgCount}})
+            })
+        }
+        else{
+            Message.find({recieverId:decrypted_user_id}, function(err, msgs){
+
+                Message.find({senderId:decrypted_user_id}, function(err, sentMsgs){
+                    let sentMsgCount = sentMsgs.length
+                console.log(msgs)
+                let msgCount = msgs.length
+                User.find({userType:"siteEngineer"}, function(err, engineers){
+                    console.log("from the directors", engineers)
+                    res.render('Admin/dashboard/message_inspector_get', {layout: "layout/admin3", data:{engineers:engineers, sentMsgCount:sentMsgCount, inboxCount:msgCount}})
+                })
+                })
+            })
+        }
+    })
+}
+
+
+/*
+ senderId: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+    recieverId: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+    message: String,
+    notificationSeen: {type:Boolean, default:false},
+    read: {type:Boolean, default:false}
+*/ 
+exports.message_inspector_post = function(req, res){
+    console.log("message post", req.body)
+    redirector(req, res)
+    let decrypted_user_id = decrypt(req.session.user_id)
+    let message = new Message();
+    message.senderId = decrypted_user_id;
+    message.recieverId = req.body.recieverId;
+    message.subject = req.body.subject;
+    message.message = req.body.message;
+    message.save(function(err, auth_details){
+        if(err){
+            console.log(err)
+        }
+        else {
+            res.render('Admin/dashboard/successpage', {layout: false, message:{successMessage: `Message Successfully Sent`, successDescription: `Message has been successfully sent to the Highway Official`} })
+        }
+    });
+}
+
+exports.view_sent_messages_get = function(req, res) {
+    redirector(req, res)
+    let decrypted_user_id = decrypt(req.session.user_id)
+    Message.find({recieverId:decrypted_user_id}, function(err, msgs){
+        let msgCount = msgs.length
+    Message.find({senderId:decrypted_user_id}, function(err, sentMsgs){
+        res.render('Admin/dashboard/view_messages', {layout: "layout/admin3", data:{sentMsgs:sentMsgs, sentMsgCount:sentMsg.length, inboxCount:msgCount}})
+    })
+})
 }
 
 exports.edit_datasheet_report_post = function(req, res){
@@ -474,6 +548,8 @@ exports.upload_to_datasheet_post = function(req, res){
 
 }
 
+
+
 exports.upload_multiple_inspection_datasheet_post = function(req, res){
     
      console.log(req.files.file)
@@ -489,7 +565,11 @@ exports.upload_multiple_inspection_datasheet_post = function(req, res){
 
 }
 
-
+exports.all_highway_inspectors = function(req, res){
+    User.find({userType:"siteEngineer"}, function(err, engineers){
+        res.render('Admin/dashboard/all_highway_inspectors', {layout: "layout/data_layout", data:{engineers:engineers} })
+    })
+}
 
 
 exports.register_post = function(req, res) {
@@ -509,8 +589,10 @@ exports.register_post = function(req, res) {
                 user.email = req.body.email;
                 user.firstName = req.body.first_name;
                 user.lastName = req.body.last_name;
+                user.phoneNumber = req.body.phoneNumber;
+                user.gender = req.body.gender;
                 user.password = req.body.password;
-                user.userType = req.body.user_type;
+                user.userType = "superAdmin";
                 user.isAdmin = false;   
                 user.phoneNumber = req.body.phone_number;     
                 user.save(function(err, auth_details){       

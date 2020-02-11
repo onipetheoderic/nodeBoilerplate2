@@ -30,6 +30,18 @@ router.route('/upload_multiple_inspection_datasheet')
     .get(AuthDashboard.upload_multiple_inspection_datasheet_get)
     .post(AuthDashboard.upload_multiple_inspection_datasheet_post)
 
+router.route('/message_inspector')
+    .get(AuthDashboard.message_inspector_get)
+    .post(AuthDashboard.message_inspector_post)
+
+router.route('/view_sent_messages_get')
+    .get(AuthDashboard.view_sent_messages_get)
+
+router.route('/all_highway_inspectors')
+    .get(AuthDashboard.all_highway_inspectors)
+
+router.route('/read_messages_get/:id')
+    .get(AuthDashboard.read_messages_get)
 
 router.route('/all_inspections')
     .get(AdminDashboardController.all_inspections)

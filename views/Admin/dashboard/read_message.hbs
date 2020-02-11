@@ -1,0 +1,103 @@
+
+        <!-- bootstrap select CSS
+		============================================ -->
+
+<!-- Main Menu area End-->
+	<!-- Breadcomb area Start-->
+	<div class="breadcomb-area">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+					<div class="breadcomb-list">
+						<div class="row">
+							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+								<div class="breadcomb-wp">
+									<div class="breadcomb-icon">
+										<i class="notika-icon notika-mail"></i>
+									</div>
+									<div class="breadcomb-ctn">
+										<h2>Compose Message</h2>
+										<p>Quickly Compose your Message</span></p>
+									</div>
+								</div>
+							</div>
+							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-3">
+								<div class="breadcomb-report">
+									<button data-toggle="tooltip" data-placement="left" title="Download Report" class="btn"><i class="notika-icon notika-sent"></i></button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Breadcomb area End-->
+    <!-- Compose email area Start-->
+    <div class="inbox-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+                    <div class="inbox-left-sd">
+                        <div class="compose-ml">
+                            <a class="btn" href="#">Compose</a>
+                        </div>
+                        <div class="inbox-status">
+                            <ul class="inbox-st-nav inbox-ft">
+                                <li><a href="#"><i class="notika-icon notika-mail"></i> Inbox<span class="pull-right">{{data.inboxCount}}</span></a></li>
+                                <li><a href="/view_sent_messages_get"><i class="notika-icon notika-sent"></i> Sent<span class="pull-right">{{data.sentdata.msgCount}}</span></a></li>
+                                <li><a href="#"><i class="notika-icon notika-draft"></i>Recieved<span class="pull-right">{{data.inboxCount}}</span></a></li>
+                                
+                            </ul>
+                        </div>
+                        <hr>
+                        
+                        
+                    </div>
+                </div>
+
+        <form action="/message_inspector" method="POST" enctype="multipart/form-data">
+                <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+                    <div class="view-mail-list sm-res-mg-t-30">
+                        <div class="view-mail-hd">
+                            <div class="view-mail-hrd">
+                                <h2>{{data.msg.subject}}</h2>
+                            </div>
+                        </div>
+
+                        
+                        <div class="cmp-int-box mg-t-20">
+                            <div class="row">
+                                 <div class="col-lg-1 col-md-2 col-sm-2 col-xs-12">
+                                    <div class="cmp-int-lb text-right">
+                                        <span></span>
+                                    </div>
+                                </div>
+                           <div class="content">
+                                <h2>{{data.msg.subject}}!</h2>
+                                <p>{{data.msg.message}}</p>
+                              
+                            </div>
+                        </div>
+                            {{!-- <div class="html-editor-cm">
+                                <h2>Hello Mamunur Roshid!</h2>
+                                <p>Dummy text of the printing and typesetting industry. Lorem Ipsum has been the <b>dustrys standard dummy text</b> ever since the 1500s, when an unknown printer took a galley of types and scrambleded it to make a type specimenen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages <a href="#">Read more</a>.</p>
+                                <p>All the Lorem Ipsum generators on the Internet tend to repeat the predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence crisity structures, to generate Lorem Ipsum which looks reasonable. recently with.Dummy text of the printing and typesetting industryunknown printer took a galley of type.</p>
+                                <span class="vw-tr">Thanks and Regards</span>
+                                <span>Mark Smith</span>
+                            </div> --}}
+                        </div>
+                       
+                        {{!-- <div class="vw-ml-action-ls text-right mg-t-20">
+                            <div class="btn-group ib-btn-gp active-hook nk-email-inbox">
+                                <button type="submit" class="btn btn-default btn-sm waves-effect"><i class="notika-icon notika-next"></i>Send</button>
+
+                            </div>
+                        </div> --}}
+                    </div>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Compose email area End-->

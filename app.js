@@ -154,6 +154,32 @@ hbs.registerHelper('mini-truncator', function (str) {
   }
 });
 
+
+hbs.registerHelper('msg-truncator', function (str) {
+  if(str.length>=30) {
+    var maxLength = 30 // maximum number of characters to extract
+
+//trim the string to the maximum length
+    var trimmedString = str.substr(0, maxLength);
+
+//re-trim if we are in the middle of a word
+    trimmedString = trimmedString.substr(0, Math.min(trimmedString.length, trimmedString.lastIndexOf("")))
+    return trimmedString+"...";
+  }
+  else{
+    return str;
+  }
+});
+
+hbs.registerHelper('ifvalue', function (conditional, options) {
+  if (options.hash.value === conditional) {
+    return options.fn(this)
+  } else {
+    return options.inverse(this);
+  }
+});
+
+
 hbs.registerHelper('medium-truncator', function (str) {
   if(str.length>=160) {
     var maxLength = 160 // maximum number of characters to extract
@@ -176,6 +202,12 @@ hbs.registerHelper('ifEquals', function(arg1, options) {
   return options.inverse(this);
 });
 
+hbs.registerHelper('ifCond', function(v1, v2, options) {
+  if(v1 === v2) {
+    return options.fn(this);
+  }
+  return options.inverse(this);
+});
 
 hbs.registerHelper('ifCond', function(v1, v2, options) {
   if(v1 >= v2) {
