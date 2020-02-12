@@ -666,6 +666,11 @@ exports.all_highway_inspectors = function(req, res){
     })
 }
 
+exports.changePassword = function(req, res){
+    res.render('Admin/dashboard/change_password', {layout: "layout/login-register"})
+    
+}
+
 
 exports.register_post = function(req, res) {
     console.log("registerpost url", req.body)
@@ -692,7 +697,7 @@ exports.register_post = function(req, res) {
                 user.phoneNumber = req.body.phone_number;     
                 user.save(function(err, auth_details){       
                     if(err){
-                        res.render('Admin/dashboard/login-register', {layout: "layout/admin", message:{error: "Error occured during user registration"} })
+                        res.render('Admin/dashboard/login-register', {layout: "layout/login-register", message:{error: "Error occured during user registration"} })
                         return;
                     } else {                    
                         res.render('Admin/dashboard/successpage', {layout: false, message:{successMessage: "User Successfully Registered", successDescription: `The Username is ${req.body.email}, while the Password is ${randomPassword}`} })
@@ -703,16 +708,17 @@ exports.register_post = function(req, res) {
         }
         else if(valss !=null){
               // console.log("Phone number taken")
-            res.render('Admin/dashboard/login-register', {layout: false, message:{error: "Phone Number has already been taken"} })
+            res.render('Admin/dashboard/login-register', {layout: "layout/login-register", message:{error: "Phone Number has already been taken"} })
 
         }
 
+      
+        }) 
+        }
         else if(vals !=null){            
             // console.log("username taken")
-            res.render('Admin/dashboard/login-register', {layout: false, message:{error: "Email has already been taken"} })
+            res.render('Admin/dashboard/login-register', {layout: "layout/login-register", message:{error: "Email has already been taken"} })
             }
-        })
-        }
      })   
 
 }
