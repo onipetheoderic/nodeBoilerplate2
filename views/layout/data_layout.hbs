@@ -58,9 +58,80 @@
     <!-- modernizr JS
 		============================================ -->
     <script src="/Admin/assets/js/vendor/modernizr-2.8.3.min.js"></script>
+    <script src="/Admin/assets/js/vendor/jquery-1.12.4.min.js"></script>
 </head>
 
 <body>
+    
+<script>
+
+  $(document).ready(function(){
+			setTimeout(function(){
+    	$('.notice_wrapper').slideUp('slow', function(){
+        	$(this).remove();
+          })
+        }, 2000);
+	
+});
+</script>
+   <div class="notice_wrapper">		  	
+	<p class="alert">{{{data.success}}}</p>				
+	</div>
+	
+
+<style type="text/css">
+
+.alert {
+    padding: 25px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+  
+.alert-success {
+color: #FFF;
+background-color: #19B698;
+border-color: #0FAC8E;
+}
+  
+.alert-info {
+color: #FFF;
+background-color: #4AA3DF;
+border-color: #4099D5;
+}
+.notice_wrapper {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 999;
+    background: rgba(135,216,211,0.5);
+   
+}
+.notice_wrapper_error {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 999;
+    background: rgba(102, 4, 4, 0.5);
+   
+}
+.alert, .notice {
+    padding-top: 1.7rem;
+    text-align: center;
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: white;
+    letter-spacing: 1px;
+}
+
+.alert-danger {
+    color: #FFF;
+    background-color: #EA6153;
+    border-color: #E05749;
+}
+
+</style>
     <!--[if lt IE 8]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->

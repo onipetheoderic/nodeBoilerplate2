@@ -35,19 +35,19 @@ exports.home = function(req, res) {
             const minister = user.userType === "minister"?true:false;
             const director = user.userType === "director"?true:false;
             if(superAdmin){
-                res.render('Admin/dashboard/index_superadmin', {layout: "layout/admin3", user:user})
+                res.render('Admin/dashboard/index_superadmin', {layout: "layout/admin3", user:user, name:user.firstName})
             }
             else if(siteEngineer){
-                res.render('Admin/dashboard/index_site_engineer', {layout: "layout/admin3", user:user})
+                res.render('Admin/dashboard/index_site_engineer', {layout: "layout/admin3", user:user, name:user.firstName})
             }
             else if(permanentSecretary){
-                res.render('Admin/dashboard/index_permanent_secretary', {layout: "layout/admin3", user:user})
+                res.render('Admin/dashboard/index_permanent_secretary', {layout: "layout/admin3", user:user, name:user.firstName})
             }
             else if(minister){
-                res.render('Admin/dashboard/index_minister', {layout: "layout/admin3", user:user})
+                res.render('Admin/dashboard/index_minister', {layout: "layout/admin3", user:user, name:user.firstName})
             }
             else if(director){
-                res.render('Admin/dashboard/index_director', {layout: "layout/admin3", user:user})
+                res.render('Admin/dashboard/index_director', {layout: "layout/admin3", user:user, name:user.firstName})
             }
           
         })
@@ -58,10 +58,10 @@ exports.home = function(req, res) {
 exports.login = function(req, res) {
     
     console.log("this is the session",req.session)
-    res.render('Admin/dashboard/login-register', {layout: "layout/login-register", })
+    res.render('Admin/dashboard/login-register', {layout: "layout/login-register" })
 }
 exports.register = function(req, res) {
-    res.render('Admin/dashboard/login-register', {layout: "layout/login-register", })
+    res.render('Admin/dashboard/login-register', {layout: "layout/login-register"})
 }
 exports.all_inspections = function(req, res) {
     res.render('Admin/dashboard/all_inspections', {layout: "layout/data_layout"})
