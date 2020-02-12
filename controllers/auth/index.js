@@ -663,10 +663,53 @@ exports.all_highway_inspectors = function(req, res){
     })
 }
 
-exports.changePassword = function(req, res){
-    res.render('Admin/dashboard/change_password', {layout: "layout/login-register"})
+exports.changePassword_get = function(req, res){
+    if(!req.session.hasOwnProperty("user_id")){
+        console.log("its working", req.session.user_id)
+        res.redirect('/login')
+    }
+    else if(req.session.hasOwnProperty("user_id")){
+        let decrypted_user_id = decrypt(req.session.user_id, req, res)
+        res.render('Admin/dashboard/change_password', {layout: "layout/login-register"})
+    }
     
 }
+
+
+
+
+exports.changePassword_post = function(req, res){
+   const previousPassword = req.body.previous_password;
+   const newPassword = req.body.new_password;
+
+    if(!req.session.hasOwnProperty("user_id")){
+        console.log("its working", req.session.user_id)
+        res.redirect('/login')
+    }
+    else if(req.session.hasOwnProperty("user_id")){
+        let decrypted_user_id = decrypt(req.session.user_id, req, res)
+        User.findOne({_id:decrypted_user_id}, function(err, user){           
+            if(user.password === previousPassword){
+                User.findByIdAndUpdate(decrypted_user_id, {password:newPassword})
+                .exec(function(err, updated_staff){
+                    if(err){
+                        console.log(err)
+                    }else {
+                        res.redirect('/login')
+                    }
+                })
+                
+            }
+            else {
+                res.render('Admin/dashboard/change_password', {layout: "layout/login-register", message:{error:'You Entered the Wrong Password'}})
+            }
+        })
+    }
+
+
+    
+}
+
 
 
 exports.register_post = function(req, res) {
