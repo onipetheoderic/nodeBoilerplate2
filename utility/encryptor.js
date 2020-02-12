@@ -15,6 +15,7 @@ exports.encrypt = (text) => {
 }
 
 exports.decrypt = (text, req, res) => {
+    
 if(text!=undefined){
     let iv = Buffer.from(text.iv, 'hex');
     let encryptedText = Buffer.from(text.encryptedData, 'hex');
@@ -24,7 +25,7 @@ if(text!=undefined){
     return decrypted.toString();
    }
    else{
-    res.redirect('/login');
+    return;
    }
 }
 

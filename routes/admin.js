@@ -36,6 +36,8 @@ router.route('/message_inspector')
 
 router.route('/view_sent_messages_get')
     .get(AuthDashboard.view_sent_messages_get)
+router.route('/view_recieved_messages_get')
+    .get(AuthDashboard.view_recieved_messages_get)
 
 router.route('/all_highway_inspectors')
     .get(AuthDashboard.all_highway_inspectors)

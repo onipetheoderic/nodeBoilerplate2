@@ -19,33 +19,41 @@ const filePlacerAndNamer = (req, res, the_file) => {
 }
 
 exports.home = function(req, res) {
-    redirector(req, res)
-    console.log("this is the session",req.session)
-    let decrypted_user_id = decrypt(req.session.user_id, req, res)
-    User.findOne({_id:decrypted_user_id}, function(err, user){
-        console.log(user.userType)
-        const superAdmin = user.userType ==="superAdmin"?true:false;
-        const siteEngineer = user.userType==="siteEngineer"?true:false;
-        const permanentSecretary = user.userType ==="permanentSecretary"?true:false;
-        const minister = user.userType === "minister"?true:false;
-        const director = user.userType === "director"?true:false;
-        if(superAdmin){
-            res.render('Admin/dashboard/index_superadmin', {layout: "layout/admin3", user:user})
-        }
-        else if(siteEngineer){
-            res.render('Admin/dashboard/index_site_engineer', {layout: "layout/admin3", user:user})
-        }
-        else if(permanentSecretary){
-            res.render('Admin/dashboard/index_permanent_secretary', {layout: "layout/admin3", user:user})
-        }
-        else if(minister){
-            res.render('Admin/dashboard/index_minister', {layout: "layout/admin3", user:user})
-        }
-        else if(director){
-            res.render('Admin/dashboard/index_director', {layout: "layout/admin3", user:user})
-        }
-      
-    })
+    
+    if(!req.session.hasOwnProperty("user_id")){
+        console.log("its working", req.session.user_id)
+        res.redirect('/login')
+    }
+    else if(req.session.hasOwnProperty("user_id")){
+        let decrypted_user_id = decrypt(req.session.user_id, req, res)
+        console.log("this is the decrypted user", decrypted_user_id)
+        User.findOne({_id:decrypted_user_id}, function(err, user){
+            console.log(user.userType)
+            const superAdmin = user.userType ==="superAdmin"?true:false;
+            const siteEngineer = user.userType==="siteEngineer"?true:false;
+            const permanentSecretary = user.userType ==="permanentSecretary"?true:false;
+            const minister = user.userType === "minister"?true:false;
+            const director = user.userType === "director"?true:false;
+            if(superAdmin){
+                res.render('Admin/dashboard/index_superadmin', {layout: "layout/admin3", user:user})
+            }
+            else if(siteEngineer){
+                res.render('Admin/dashboard/index_site_engineer', {layout: "layout/admin3", user:user})
+            }
+            else if(permanentSecretary){
+                res.render('Admin/dashboard/index_permanent_secretary', {layout: "layout/admin3", user:user})
+            }
+            else if(minister){
+                res.render('Admin/dashboard/index_minister', {layout: "layout/admin3", user:user})
+            }
+            else if(director){
+                res.render('Admin/dashboard/index_director', {layout: "layout/admin3", user:user})
+            }
+          
+        })
+    }
+
+   
 }
 exports.login = function(req, res) {
     

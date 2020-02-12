@@ -125,22 +125,27 @@ name: "Site Clearance", inspection_type_id: "10"}
 
 
 exports.datasheet_select = function(req, res) {
-    redirector(req, res)
-    let decrypted_user_id = decrypt(req.session.user_id, req, res)
-    const myUrl = `${BASEURL}/user_contract/${decrypted_user_id}`
-    Request.get({url: myUrl}, (error, response, body) => {
-        // console.log("this is the response",response)
-        if(error) {
-            return console.log(error);
-        }
-      
-        console.log("this is the parsed Body",body)
-        console.log("this is the parsed Body",JSON.parse(body));
-        const allContracts = JSON.parse(body)
-        const dataPresence = allContracts.length === 0 ? false : true
-        console.log("this si the data presence",dataPresence)
-        res.render('Admin/dashboard/datasheet_select', {layout: "layout/assign", data:{contracts:allContracts, dataPresence:dataPresence }})
-    });
+    if(!req.session.hasOwnProperty("user_id")){
+        console.log("its working", req.session.user_id)
+        res.redirect('/login')
+    }
+    else if(req.session.hasOwnProperty("user_id")){
+        let decrypted_user_id = decrypt(req.session.user_id, req, res)
+        const myUrl = `${BASEURL}/user_contract/${decrypted_user_id}`
+        Request.get({url: myUrl}, (error, response, body) => {
+            // console.log("this is the response",response)
+            if(error) {
+                return console.log(error);
+            }
+        
+            console.log("this is the parsed Body",body)
+            console.log("this is the parsed Body",JSON.parse(body));
+            const allContracts = JSON.parse(body)
+            const dataPresence = allContracts.length === 0 ? false : true
+            console.log("this si the data presence",dataPresence)
+            res.render('Admin/dashboard/datasheet_select', {layout: "layout/assign", data:{contracts:allContracts, dataPresence:dataPresence }})
+        });
+    }
 }
 
 exports.datasheet_inspection_type = function(req, res){
@@ -166,41 +171,50 @@ exports.create_datasheet_report_post = function(req, res){
     });
 }
 
-exports.read_messages_get = function(req, res){
-    Message.findOne({_id:req.params.id}, function(err, msg){
-        res.render('Admin/dashboard/read_message', {layout: "layout/admin3", data:{msg:msg}})
-    })
-}
+
 
 exports.view_inspections = function(req, res){
     res.render('Admin/dashboard/view_inspections', {layout: "layout/admin3"})
 }
 
 exports.message_inspector_get = function(req, res){
-redirector(req, res)
-    let decrypted_user_id = decrypt(req.session.user_id, req, res)
-    User.findOne({_id:decrypted_user_id}, function(err, user){
-        if(user.userType === "siteEngineer"){
-            User.find({userType:"director"}, function(err, directors){
-                console.log("from the directors", directors)
-                res.render('Admin/dashboard/message_inspector_get', {layout: "layout/admin3", data:{directors:directors, sentMsgCount:sentMsgCount, inboxCount:msgCount}})
-            })
-        }
-        else{
-            Message.find({recieverId:decrypted_user_id}, function(err, msgs){
+    if(!req.session.hasOwnProperty("user_id")){
+        console.log("its working", req.session.user_id)
+        res.redirect('/login')
+    }
+    else if(req.session.hasOwnProperty("user_id")){
+        let decrypted_user_id = decrypt(req.session.user_id, req, res)
+        User.findOne({_id:decrypted_user_id}, function(err, user){
+            if(user.userType === "siteEngineer"){
+                Message.find({recieverId:decrypted_user_id}, function(err, msgs){
 
-                Message.find({senderId:decrypted_user_id}, function(err, sentMsgs){
-                    let sentMsgCount = sentMsgs.length
-                console.log(msgs)
-                let msgCount = msgs.length
-                User.find({userType:"siteEngineer"}, function(err, engineers){
-                    console.log("from the directors", engineers)
-                    res.render('Admin/dashboard/message_inspector_get', {layout: "layout/admin3", data:{engineers:engineers, sentMsgCount:sentMsgCount, inboxCount:msgCount}})
+                    Message.find({senderId:decrypted_user_id}, function(err, sentMsgs){
+                        let sentMsgCount = sentMsgs.length
+                    console.log(msgs)
+                    let msgCount = msgs.length
+                        User.find({userType:"director"}, function(err, directors){
+                            console.log("from the directors", directors)
+                            res.render('Admin/dashboard/message_inspector_get', {layout: "layout/admin3", data:{engineers:directors, sentMsgCount:sentMsgCount, inboxCount:msgCount}})
+                        })
+                    })
                 })
+            }
+            else{
+                Message.find({recieverId:decrypted_user_id}, function(err, msgs){
+
+                    Message.find({senderId:decrypted_user_id}, function(err, sentMsgs){
+                        let sentMsgCount = sentMsgs.length
+                    console.log(msgs)
+                    let msgCount = msgs.length
+                    User.find({userType:"siteEngineer"}, function(err, engineers){
+                        console.log("from the directors", engineers)
+                        res.render('Admin/dashboard/message_inspector_get', {layout: "layout/admin3", data:{engineers:engineers, sentMsgCount:sentMsgCount, inboxCount:msgCount}})
+                    })
+                    })
                 })
-            })
-        }
-    })
+            }
+        })
+    }
 }
 
 
@@ -212,8 +226,11 @@ redirector(req, res)
     read: {type:Boolean, default:false}
 */ 
 exports.message_inspector_post = function(req, res){
-    console.log("message post", req.body)
-    redirector(req, res)
+    if(!req.session.hasOwnProperty("user_id")){
+        console.log("its working", req.session.user_id)
+        res.redirect('/login')
+    }
+    else if(req.session.hasOwnProperty("user_id")){
     let decrypted_user_id = decrypt(req.session.user_id, req, res)
     let message = new Message();
     message.senderId = decrypted_user_id;
@@ -229,18 +246,56 @@ exports.message_inspector_post = function(req, res){
         }
     });
 }
+}
 
 exports.view_sent_messages_get = function(req, res) {
-    redirector(req, res)
+    if(!req.session.hasOwnProperty("user_id")){
+        console.log("its working", req.session.user_id)
+        res.redirect('/login')
+    }
+    else if(req.session.hasOwnProperty("user_id")){
     let decrypted_user_id = decrypt(req.session.user_id, req, res)
     Message.find({recieverId:decrypted_user_id}, function(err, msgs){
         let msgCount = msgs.length
     Message.find({senderId:decrypted_user_id}, function(err, sentMsgs){
-        res.render('Admin/dashboard/view_messages', {layout: "layout/admin3", data:{sentMsgs:sentMsgs, sentMsgCount:sentMsg.length, inboxCount:msgCount}})
+        res.render('Admin/dashboard/view_messages', {layout: "layout/admin3", data:{sentMsgs:sentMsgs, sentMsgCount:sentMsgs.length, inboxCount:msgCount}})
     })
 })
+    }
 }
 
+exports.view_recieved_messages_get = function(req, res) {
+    if(!req.session.hasOwnProperty("user_id")){
+        console.log("its working", req.session.user_id)
+        res.redirect('/login')
+    }
+    else if(req.session.hasOwnProperty("user_id")){
+    let decrypted_user_id = decrypt(req.session.user_id, req, res)
+    Message.find({recieverId:decrypted_user_id}, function(err, msgs){
+        let msgCount = msgs.length
+    Message.find({senderId:decrypted_user_id}, function(err, sentMsgs){
+        res.render('Admin/dashboard/view_recieved_messages_get', {layout: "layout/admin3", data:{sentMsgs:sentMsgs, recievedMsgs:msgs, sentMsgCount:sentMsgs.length, inboxCount:msgCount}})
+    })
+})
+    }
+}
+exports.read_messages_get = function(req, res){
+    if(!req.session.hasOwnProperty("user_id")){
+        console.log("its working", req.session.user_id)
+        res.redirect('/login')
+    }
+    else if(req.session.hasOwnProperty("user_id")){
+    let decrypted_user_id = decrypt(req.session.user_id, req, res)
+    Message.find({recieverId:decrypted_user_id}, function(err, msgs){
+        let msgCount = msgs.length
+    Message.find({senderId:decrypted_user_id}, function(err, sentMsgs){
+    Message.findOne({_id:req.params.id}, function(err, msg){
+        res.render('Admin/dashboard/read_message', {layout: "layout/admin3", data:{msg:msg, sentMsgCount:sentMsgs.length, inboxCount:msgCount}})
+    })
+})
+    });
+}
+}
 exports.edit_datasheet_report_post = function(req, res){
     console.log("this is the body of the Ajax call",req.body)
     console.log("single document", req.body[0].datasheet_id)
@@ -268,7 +323,11 @@ exports.edit_datasheet_report_post = function(req, res){
 
 exports.inspection_report = function(req, res){
     console.log("route reached")
-    redirector(req, res)
+    if(!req.session.hasOwnProperty("user_id")){
+        console.log("its working", req.session.user_id)
+        res.redirect('/login')
+    }
+    else if(req.session.hasOwnProperty("user_id")){
     let decrypted_user_id = decrypt(req.session.user_id, req, res)
     let inpsection_type = req.params.id;
     let datasheet_id = req.params.datasheet_id
@@ -290,13 +349,18 @@ exports.inspection_report = function(req, res){
             }
            
     })
+}
 
 }
 
 
 
 exports.create_inspection_data_sheet = function(req, res){
-    redirector(req, res)
+    if(!req.session.hasOwnProperty("user_id")){
+        console.log("its working", req.session.user_id)
+        res.redirect('/login')
+    }
+    else if(req.session.hasOwnProperty("user_id")){
     console.log("this is the user session",req.session)
     let decrypted_user_id = decrypt(req.session.user_id, req, res)
     Datasheet.findOne({contract_id:req.body.contract_id}, function(err, datasheet){
@@ -328,6 +392,7 @@ exports.create_inspection_data_sheet = function(req, res){
             
         }
     })
+}
 }
 
 exports.get_contract_datas = function(req, res) {
@@ -364,7 +429,11 @@ exports.get_contract_datas = function(req, res) {
 }
 
 exports.modify_highway_contract_percentage = function(req, res){
-    redirector(req, res)
+    if(!req.session.hasOwnProperty("user_id")){
+        console.log("its working", req.session.user_id)
+        res.redirect('/login')
+    }
+    else if(req.session.hasOwnProperty("user_id")){
     console.log("this is the user session",req.session)
     let decrypted_user_id = decrypt(req.session.user_id, req, res)
     //sends a post request, with the user id as a parameter and gets all the contract he is managign
@@ -380,10 +449,15 @@ exports.modify_highway_contract_percentage = function(req, res){
         res.render('Admin/dashboard/modify_highway_contract_percentage', {layout: "layout/assign", data:{contracts:allContracts}})
     });
 }
+}
 
 
 exports.modify_highway_contract_percentage_post = function(req, res){
-    redirector(req, res)
+    if(!req.session.hasOwnProperty("user_id")){
+        console.log("its working", req.session.user_id)
+        res.redirect('/login')
+    }
+    else if(req.session.hasOwnProperty("user_id")){
     const myUrl = `${BASEURL}/modify_percentage_of_highway_contract`
     let decrypted_user_id = decrypt(req.session.user_id, req, res)
     console.log("this is the decrypted user_id",decrypted_user_id)
@@ -411,10 +485,15 @@ exports.modify_highway_contract_percentage_post = function(req, res){
 
     });
 }
+}
 
 
 exports.assign_highway_contracts_post = function(req, res) {
-    redirector(req, res)
+    if(!req.session.hasOwnProperty("user_id")){
+        console.log("its working", req.session.user_id)
+        res.redirect('/login')
+    }
+    else if(req.session.hasOwnProperty("user_id")){
     console.log("this are the request",req.body)
     const myUrl = `${BASEURL}/assign_highway_to_contract`
     let userDetail = req.body.user.split(",")
@@ -441,7 +520,7 @@ exports.assign_highway_contracts_post = function(req, res) {
         }        
 
     });
-
+    }
     //assign_highway_to_contract
    
 }
@@ -496,11 +575,16 @@ exports.upload_multiple_inspection_datasheet_get = function(req, res){
 
 
 exports.upload_images_to_datasheet = function(req, res){
-    redirector(req, res)
+    if(!req.session.hasOwnProperty("user_id")){
+        console.log("its working", req.session.user_id)
+        res.redirect('/login')
+    }
+    else if(req.session.hasOwnProperty("user_id")){
     let decrypted_user_id = decrypt(req.session.user_id, req, res)
     Datasheet.find({highway_inspector_id:decrypted_user_id}, function(err, datasheets){
         res.render('Admin/dashboard/upload_multiple_images_inspection_datasheet', {layout: "layout/admin3", data:{datasheets:datasheets}})
     })
+}
   
 }
 //Upload supporting images for inspections
