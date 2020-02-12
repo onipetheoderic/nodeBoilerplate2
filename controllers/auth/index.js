@@ -448,8 +448,8 @@ exports.modify_highway_contract_percentage = function(req, res){
             return console.log(error);
         }
         console.log(body)
-        console.log(JSON.parse(body));
         const allContracts = JSON.parse(body)
+        console.log("allContracts", allContracts)
         res.render('Admin/dashboard/modify_highway_contract_percentage', {layout: "layout/assign", data:{contracts:allContracts}})
     });
 }

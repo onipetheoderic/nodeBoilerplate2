@@ -115,12 +115,22 @@ hbs.registerHelper('json', function (content) {
     return JSON.stringify(content);
 });
 
+
+hbs.registerHelper('json2', function(context) {
+  console.log("from app.js",context)
+  return JSON.stringify(context);
+});
+
 hbs.registerHelper('uppercase', function (str) {
   if(str && typeof str === "string") {
     return str.toUpperCase();
   }
   return '';
 });
+
+hbs.registerHelper('toJSON', function(obj) {
+  return JSON.stringify(obj, null, 3);
+})
 
 hbs.registerHelper('truncator', function (str) {
   if(str.length>=600) {
