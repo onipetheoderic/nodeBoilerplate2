@@ -141,7 +141,8 @@ exports.datasheet_select = function(req, res) {
             console.log("this is the parsed Body",body)
             console.log("this is the parsed Body",JSON.parse(body));
             const allContracts = JSON.parse(body)
-            const dataPresence = allContracts.length === 0 ? false : true
+            const dataPresence = allContracts.length === 0 ? false : true;
+            console.log(dataPresence.length)
             console.log("this si the data presence",dataPresence)
             res.render('Admin/dashboard/datasheet_select', {layout: "layout/assign", data:{contracts:allContracts, dataPresence:dataPresence }})
         });
@@ -322,7 +323,7 @@ exports.edit_datasheet_report_post = function(req, res){
 
 
 exports.inspection_report = function(req, res){
-    console.log("route reached")
+    console.log("route reached", req.params.id)
     if(!req.session.hasOwnProperty("user_id")){
         console.log("its working", req.session.user_id)
         res.redirect('/login')
@@ -333,8 +334,8 @@ exports.inspection_report = function(req, res){
     let datasheet_id = req.params.datasheet_id
     console.log(datasheet_id)
     // we get all component that belongs to the inspection type
-    DatasheetComponent.findOne({datasheet_id: datasheet_id}, function(err, datasheetComponent){        
-                    
+    DatasheetComponent.findOne({datasheet_id: datasheet_id}, function(err, datasheetComponent){
+        
             if(datasheetComponent===null){
                 Component.find({inspection_type_id: inpsection_type}, function(err, components){
                

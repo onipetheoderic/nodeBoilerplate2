@@ -84,7 +84,7 @@ router.route('/create_inspection_datasheet')
     .get(AdminDashboardController.create_inspection_datasheet)
 */ 
 exports.create_inspection_type_get = function(req, res) {
-
+    console.log("just now",req.params.id)
     res.render('Admin/dashboard/create_inspection_type', {layout: "layout/admin3", data:{category:req.params.id}})
 }
 
@@ -142,9 +142,11 @@ exports.create_component_type_post = function(req, res){
 exports.inspection_type = function(req, res) {
     InspectionType.find({}, function(err, types){
         console.log("this are the types", req.params.id)
-        
-        res.render('Admin/dashboard/create_inspection_component', {layout: "layout/admin3", data:{inspection_type: types, mainType:req.params.id}})
+        Component.find({inspection_type_id:req.params.id}, function(err, existingComponents){
+        console.log(existingComponents)
+        res.render('Admin/dashboard/create_inspection_component', {layout: "layout/admin3", data:{existingComponents:existingComponents, inspection_type: types, mainType:req.params.id}})
     })
+})
 }
 
 
