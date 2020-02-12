@@ -489,11 +489,7 @@ exports.modify_highway_contract_percentage_post = function(req, res){
 
 
 exports.assign_highway_contracts_post = function(req, res) {
-    if(!req.session.hasOwnProperty("user_id")){
-        console.log("its working", req.session.user_id)
-        res.redirect('/login')
-    }
-    else if(req.session.hasOwnProperty("user_id")){
+   
     console.log("this are the request",req.body)
     const myUrl = `${BASEURL}/assign_highway_to_contract`
     let userDetail = req.body.user.split(",")
@@ -520,7 +516,7 @@ exports.assign_highway_contracts_post = function(req, res) {
         }        
 
     });
-    }
+    
     //assign_highway_to_contract
    
 }
@@ -722,6 +718,6 @@ exports.register_post = function(req, res) {
      })   
 
 }
-
+// Ij3Yg9i
 
 
