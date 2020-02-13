@@ -44,6 +44,7 @@
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "request": "^2.88.0",
+    "session-file-store": "^1.4.0",
     "sha1": "^1.1.1",
     "sha512": "0.0.1",
     "simple-excel-to-json": "^2.2.1",

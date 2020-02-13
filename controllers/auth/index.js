@@ -182,6 +182,7 @@ exports.view_inspections = function(req, res){
 }
 
 exports.message_inspector_get = function(req, res){
+    console.log("from the message ",req.session)
     if(!req.session.hasOwnProperty("user_id")){
         console.log("its working", req.session.user_id)
         res.redirect('/login')
@@ -400,29 +401,18 @@ exports.create_inspection_data_sheet = function(req, res){
 }
 
 exports.get_contract_datas = function(req, res) {
+    delete res._headers['set-cookie'];
+    console.log("this si the request", req)
     //this method is to use the contract id to get the dataset
-    console.log("queried from request")
-    console.log("this is the requeest paremas", req.params, req.params.contract_id)
-    Datasheet.findOne({contract_id: req.params.contract_id}, function(err, datasheet){
-       
+    Datasheet.findOne({contract_id: req.params.contract_id}, function(err, datasheet){       
         if(datasheet!=null){
-        console.log("this is the datasheet",datasheet)
         DatasheetComponent.find({datasheet_id: datasheet._id})
         .populate({path:'highway_inspector_id', select: '-password -isSuperAdmin'})
         .populate('datasheet_id').
-        exec(function (err, story) {
-            console.log('%j', story);
-           
+        exec(function (err, story) {          
             res.json({datas:story})
           });
-        // DatasheetComponent.find({datasheet_id: datasheet._id}, function(err, datasheet_component){
-        //     console.log("this is the component", datasheet_component)
-        //     datasheet_component.highway_inspector_id = highway_inspector_id;
-        //     datasheet_component.datasheet_id = datasheet_id;
-        //     console.log("this are the populated Hfields", datasheet_component.highway_inspector_id)
-        //     console.log("this are the sedond dd", datasheet_component.datasheet_id)
-        //     // res.json({datas:{datasheet, datasheet_component}})
-        // })
+        
         }
         else{
             res.json({datas:"null"})

@@ -19,7 +19,7 @@ const filePlacerAndNamer = (req, res, the_file) => {
 }
 
 exports.home = function(req, res) {
-    
+    console.log("this is the current session", req.session)
     if(!req.session.hasOwnProperty("user_id")){
         console.log("its working", req.session.user_id)
         res.redirect('/login')

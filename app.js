@@ -6,6 +6,7 @@ const fs = require("fs");
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 var session = require('express-session');
+const FileStore = require("session-file-store")(session);
 import lessMiddleware from 'less-middleware';
 import mongoose from 'mongoose';
 import hbs from 'hbs';
@@ -32,8 +33,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 app.set('view options', { layout: 'layout/main' });
 
-// uncomment after placing your favicon in /public
-// app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -43,19 +43,28 @@ app.use(express.static(path.join(__dirname, 'AdminBSBMaterialDesign-master')));
 app.use('/bower_components', express.static(`${__dirname}/bower_components`));
 
 
+app.use(session({ 
+  name: 'highway',
+  secret: 'keyboard cat', 
+  resave: false,
+  saveUninitialized: false,
+cookie: {secure:false},
+}))
+// app.use(require('express-session')({
+//   secret: 'keyboard cat',
+//   cookie: { maxAge: 60000 }
+//   resave: true,
+//   saveUninitialized: true
+// }));
 
-app.use(require('express-session')({
-  secret: 'keyboard cat',
-  resave: true,
-  saveUninitialized: true
-}));
 
-app.use(function(req, res, next){
-  // if there's a flash message in the session request, make it available  
-    res.locals.sessionFlash = req.session.sessionFlash;
-    delete req.session.sessionFlash;
-    next();
-  });
+
+// app.use(function(req, res, next){
+//   // if there's a flash message in the session request, make it available  
+//     res.locals.sessionFlash = req.session.sessionFlash;
+//     delete req.session.sessionFlash;
+//     next();
+//   });
 app.use(express.static(path.join(__dirname, 'views/public')));//this is for the css and js files in the template folder
 
 
