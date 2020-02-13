@@ -11,6 +11,8 @@ import lessMiddleware from 'less-middleware';
 import mongoose from 'mongoose';
 import hbs from 'hbs';
 const fileUpload = require('express-fileupload');
+var io = require('socket.io')(http);
+
 
 
 // import home from './routes/home';
@@ -103,20 +105,13 @@ app.get('*', function(req, res, next){
 });
 
 
-// // // error handler
-// app.use((err, req, res, next) => {
-//   // set locals, only providing error in development
-//   res.locals.message = err.message;
-//   res.locals.error = req.app.get('env') === 'development' ? err : {};
-//   console.log(res.locals.message)
-//   console.log(res.locals.error)
-//   console.log(err)
 
-//   // render the error page
-//   res.status(err.status || 500);
-//    res.render('errorpage/index', {layout: false, error_code: 404})
-//   console.log('error')
-// });
+io.on('connection', function(socket){
+  console.log('a user connected');
+  socket.on('disconnect', function(){
+    console.log('user disconnected');
+  });
+});
 
 
 

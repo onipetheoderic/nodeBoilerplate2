@@ -84,6 +84,21 @@ exports.register_highway_inspector_post = function(req, res) {
      })   
 }
 
+// exports.sendNotification = function(req, res) {
+//     var myObject = {
+//         TM: 5979,
+//         MK: '23979',
+//         PZSUX: true
+//     };
+    
+//     senderSocket.writeJSON(myObject).then(function(sendData) {
+//         // object has been send
+//     }, function (err) {
+//         // could not send object
+//     });
+
+// }
+
 
 exports.view_all_contractors = function(req, res) {
     Contractor.find({}).exec(function(err, all_records){
@@ -113,18 +128,7 @@ exports.assign_highway_contracts = function(req, res) {
     });
 }
 
-/*
-datasheet_id: {type:String, required: true},
-contract_id: {type:String, required: true},
-component_id: {type:String, required: true},
-component_name: {type:String, required: true},
-component_score: {type:Number, default:0},
 
-
-name: "Site Clearance", inspection_type_id: "10"}
-1: {name: "Excavation of soil", inspection_type_id: "10"}
-2: {name: "Earth Works", inspection_type_id: "10"}
-*/
 
 
 exports.datasheet_select = function(req, res) {
