@@ -160,8 +160,9 @@ exports.datasheet_inspection_type = function(req, res){
     const datasheet_id = req.params.id
     Datasheet.findOne({_id: req.params.id}, function(err, datasheet){
         console.log("this is the detailas of the datasheet", datasheet)
+        console.log(datasheet.project_type)
         InspectionType.find({inspectionCategory:datasheet.project_type}, function(err, inspection_types){
-            console.log("this si the datasheet",datasheet)
+            console.log("this si the datasheet",inspection_types)
             res.render('Admin/dashboard/datasheet_inspection_type', {layout: "layout/assign", 
             data:{datasheets:inspection_types, datasheet_id:datasheet._id, contract_id:datasheet.contract_id}})
         })
