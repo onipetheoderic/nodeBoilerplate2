@@ -433,12 +433,7 @@ exports.get_contract_datas = function(req, res) {
 }
 
 exports.modify_highway_contract_percentage = function(req, res){
-    if(!req.session.hasOwnProperty("user_id")){
-        console.log("its working", req.session.user_id)
-        res.redirect('/login')
-    }
-    else if(req.session.hasOwnProperty("user_id")){
-    console.log("this is the user session",req.session)
+  
     let decrypted_user_id = decrypt(req.session.user_id, req, res)
     //sends a post request, with the user id as a parameter and gets all the contract he is managign
     const myUrl = `${BASEURL}/user_contract/${decrypted_user_id}`
@@ -452,16 +447,12 @@ exports.modify_highway_contract_percentage = function(req, res){
         console.log("allContracts", allContracts)
         res.render('Admin/dashboard/modify_highway_contract_percentage', {layout: "layout/assign", data:{contracts:allContracts}})
     });
-}
+
 }
 
 
 exports.modify_highway_contract_percentage_post = function(req, res){
-    if(!req.session.hasOwnProperty("user_id")){
-        console.log("its working", req.session.user_id)
-        res.redirect('/login')
-    }
-    else if(req.session.hasOwnProperty("user_id")){
+    
     const myUrl = `${BASEURL}/modify_percentage_of_highway_contract`
     let decrypted_user_id = decrypt(req.session.user_id, req, res)
     console.log("this is the decrypted user_id",decrypted_user_id)
@@ -488,7 +479,7 @@ exports.modify_highway_contract_percentage_post = function(req, res){
         }        
 
     });
-}
+
 }
 
 
