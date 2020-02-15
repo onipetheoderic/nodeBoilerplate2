@@ -136,4 +136,20 @@ router.route('/create_inspection_data_sheet')
 router.route('/logout')
     .get(AuthDashboard.logout)
 
+
+router.route('/edit_user_profile')
+    .get(AuthDashboard.edit_user_profile_get)
+    .post(AuthDashboard.edit_user_profile_post)
+
+router.route('/delete_a_component/:id')
+    .get(AuthDashboard.delete_a_component_get)
+
+
+
+//this is highly dependent on the contract_id, so he selects the contracts he is assigned to and comments on it
+//attach it to multiple images and comment
+
+    
+
+
 export default router;

@@ -415,7 +415,7 @@ exports.get_contract_datas = function(req, res) {
         .populate({path:'highway_inspector_id', select: '-password -isSuperAdmin'})
         .populate('datasheet_id').
         exec(function (err, story) {          
-            res.json({datas:story})
+            res.json({datas:story, datasheet_details:datasheet})
           });
         
         }
@@ -512,6 +512,34 @@ exports.assign_highway_contracts_post = function(req, res) {
 }
 // InspectionType
 
+
+exports.autologin = function(req,res){
+    let email = req.body.email;
+    let password = req.body.password;
+    User.findOne({email: email}, function(err, user) {
+        console.log("its working", user)
+       if(user == null)
+        {
+           res.json({data:"error"})
+        }
+        else{
+            let user_id = user.id
+            if (user.password == password){
+                  // console.log('User connected');
+                let encId = encrypt(user_id)
+                console.log("this is the encId", encId)
+                req.session.user_id = encId;
+                res.json({data:"success"})
+              
+            }else{
+                  res.json({data:"error"})            }
+        }
+
+    })
+
+}
+
+
 exports.login = function(req, res) {
     res.render('Admin/dashboard/login-register', {layout: "layout/login-register", })
 }
@@ -568,7 +596,9 @@ exports.upload_images_to_datasheet = function(req, res){
     else if(req.session.hasOwnProperty("user_id")){
     let decrypted_user_id = decrypt(req.session.user_id, req, res)
     Datasheet.find({highway_inspector_id:decrypted_user_id}, function(err, datasheets){
-        res.render('Admin/dashboard/upload_multiple_images_inspection_datasheet', {layout: "layout/admin3", data:{datasheets:datasheets}})
+        console.log("datasheets available",datasheets, datasheets.length)
+        res.render('Admin/dashboard/upload_multiple_images_inspection_datasheet', 
+        {layout: "layout/admin3", data:{datasheets:datasheets}})
     })
 }
   
@@ -601,7 +631,7 @@ exports.upload_images_to_datasheet_post = function(req, res){
 exports.upload_to_datasheet_post = function(req, res){
     console.log("alllllllllll", req)
     Datasheet.findByIdAndUpdate(req.body.datasheet_id,
-        {images:myArray}).exec(function(err, updated_staff){
+        {images:myArray, datasheet_comment:req.body.datasheet_comment}).exec(function(err, updated_staff){
             if(err) {
                console.log(err);
                
@@ -695,8 +725,93 @@ exports.changePassword_post = function(req, res){
         })
     }
 
+}
 
+// this is for the rest
+/*
+router.route('/edit_user_profile')
+    .get(AuthDashboard.edit_user_profile_get)
+    .post(AuthDashboard.edit_user_profile_post)
+
+router.route('/delete_a_component')
+    .get(AuthDashboard.delete_a_component)
+
+//this is highly dependent on the contract_id, so he selects the contracts he is assigned to and comments on it
+//attach it to multiple images and comment
+router.route('/add_comment_to_contract/:id')
+    .get(AuthDashboard.delete_a_component)
     
+*/
+
+exports.edit_user_profile_get = function(req, res) {
+    if(!req.session.hasOwnProperty("user_id")){
+        console.log("its working", req.session.user_id)
+        res.redirect('/login')
+    }
+    else if(req.session.hasOwnProperty("user_id")){
+        let decrypted_user_id = decrypt(req.session.user_id, req, res)
+        User.findOne({_id: decrypted_user_id}, function(err, user){
+            console
+            res.render('Admin/dashboard/edit_user_profile_get', {layout: "layout/register_highway", data:{user:user}})
+        })
+        //render4 the edit screen
+    }
+}
+exports.edit_user_profile_post = function(req, res) {
+    if(!req.session.hasOwnProperty("user_id")){
+        console.log("its working", req.session.user_id)
+        res.redirect('/login')
+    }
+    else if(req.session.hasOwnProperty("user_id")){
+        let decrypted_user_id = decrypt(req.session.user_id, req, res)
+        User.findByIdAndUpdate(decrypted_user_id, {
+           firstName:req.body.firstName,
+           lastName:req.body.lastName,
+           phoneNumber:req.body.phoneNumber,
+           email:req.body.email,
+           gender:req.body.gender,
+
+        })
+        .exec(function(err, updated_staff){
+            if(err){
+                console.log(err)
+            }else {
+                res.redirect('/')
+            }
+        })
+    }
+
+}
+
+//expecting req.params
+
+/*
+router.get('/delete_class/:id', (req, res) => {
+    let class_id = req.params.id;
+    Class.findByIdAndRemove({_id: req.params.id}, 
+       function(err, docs){
+        if(err) res.json(err);
+        else res.redirect('/admin/create_class');
+    });
+ 
+})
+*/ 
+exports.delete_a_component_get = function(req, res) {
+    if(!req.session.hasOwnProperty("user_id")){
+        console.log("its working", req.session.user_id)
+        res.redirect('/login')
+    }
+    else if(req.session.hasOwnProperty("user_id")){
+        Component.findByIdAndRemove({_id:req.params.id},
+            function(err, comps){
+                if(err){
+                    console.log(err)
+                }
+                else {
+                    res.redirect('/component_parent')
+                }
+        })
+    }
 }
 
 
@@ -737,6 +852,7 @@ exports.register_post = function(req, res) {
         }
         else if(valss !=null){
               // console.log("Phone number taken")
+              
             res.render('Admin/dashboard/login-register', {layout: "layout/login-register", message:{error: "Phone Number has already been taken"} })
 
         }
