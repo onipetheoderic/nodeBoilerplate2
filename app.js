@@ -127,7 +127,7 @@ app.get('*', function(req, res, next){
 });
 
 
-io.set('origins', 'http://178.62.55.64:*');
+io.set('origins', 'http://178.62.55.64:4000');
 
 io.on("connection", socket => {
   console.log('a user connected');
