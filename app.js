@@ -11,8 +11,9 @@ import lessMiddleware from 'less-middleware';
 import mongoose from 'mongoose';
 import hbs from 'hbs';
 const fileUpload = require('express-fileupload');
-var io = require('socket.io')(http);
 
+
+var cors = require('cors');    
 
 
 // import home from './routes/home';
@@ -22,7 +23,28 @@ import admin from './routes/admin';
 const app = express();
 app.use(fileUpload());
 var debug = require('debug');
+// app.use(cors({credentials: true, origin: 'http://localhost:4000'}));
+app.use(cors({
+  origin: function(origin, callback){
+    return callback(null, true);
+  },
+  optionsSuccessStatus: 200,
+  credentials: true
+}));
+
 var http = require('http').Server(app);
+
+const io = require("socket.io")(http, {
+  handlePreflightRequest: (req, res) => {
+      const headers = {
+          "Access-Control-Allow-Headers": "Content-Type, Authorization",
+          "Access-Control-Allow-Origin": req.headers.origin, //or the specific origin you want to give access to,
+          "Access-Control-Allow-Credentials": true
+      };
+      res.writeHead(200, headers);
+      res.end();
+  }
+});
 const port = process.env.PORT || '5000';
 
 
@@ -105,14 +127,39 @@ app.get('*', function(req, res, next){
 });
 
 
+io.set('origins', 'http://178.62.55.64:*');
 
-io.on('connection', function(socket){
+io.on("connection", socket => {
   console.log('a user connected');
-  socket.on('disconnect', function(){
-    console.log('user disconnected');
+  socket.emit("new user", "Welcome to the room!");
+
+  socket.broadcast.emit("announcement", "a new user joined...");
+
+  socket.on("chat message", msg => {
+    io.emit("chat message", msg);
   });
+
+  socket.on("disconnect", () => {
+    io.emit("announcement", "a user just left...");
+  });
+  
 });
 
+
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Credentials", true);
+  res.header("Access-Control-Allow-Origin", req.headers.origin);
+  res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept"
+  );
+  if ("OPTIONS" == req.method) {
+    res.send(200);
+  } else {
+    next();
+  }
+});
 
 
 hbs.registerHelper('json', function (content) {
