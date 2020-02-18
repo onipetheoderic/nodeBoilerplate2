@@ -18,17 +18,13 @@ const filePlacerAndNamer = (req, res, the_file) => {
     return file_name
 }
 
-exports.home = function(req, res) {
-    console.log("this is the current session", req.session)
-    if(!req.session.hasOwnProperty("user_id")){
-        console.log("its working", req.session.user_id)
+exports.home = function(req, res) {    
+    if(!req.session.hasOwnProperty("user_id")){      
         res.redirect('/login')
     }
     else if(req.session.hasOwnProperty("user_id")){
         let decrypted_user_id = decrypt(req.session.user_id, req, res)
-        console.log("this is the decrypted user", decrypted_user_id)
         User.findOne({_id:decrypted_user_id}, function(err, user){
-            console.log(user.userType)
             const superAdmin = user.userType ==="superAdmin"?true:false;
             const siteEngineer = user.userType==="siteEngineer"?true:false;
             const permanentSecretary = user.userType ==="permanentSecretary"?true:false;
@@ -104,8 +100,11 @@ exports.success_type = function(req, res) {
 exports.success_component = function(req, res) {
     res.render('Admin/dashboard/success_component', {layout: "layout/admin3"})
 }
+
+
 exports.create_inpsector_type_post = function(req, res){
     console.log("this is the ajax bobdy",req.body)
+
     InspectionType.insertMany(req.body, function (err, docs) {
       if (err){
           return console.error(err);
@@ -126,14 +125,17 @@ exports.create_inspection_component = function(req, res) {
 
 //component_parent
 //inspection_type
+
 exports.create_component_type_post = function(req, res){
     console.log("this is the ajax bobdy",req.body)
+   
     Component.insertMany(req.body, function (err, docs) {
       if (err){
           return console.error(err);
           res.status(400).json(err);
       } else {       
         res.status(200).json(docs);
+       
       }
     });
 }

@@ -1,0 +1,105 @@
+{{!-- all_highway_contracts_page --}}
+    <!-- Main Menu area End-->
+	<!-- Breadcomb area Start-->
+	<div class="breadcomb-area">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+					<div class="breadcomb-list">
+						<div class="row">
+							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+								<div class="breadcomb-wp">
+									<div class="breadcomb-icon">
+										<i class="notika-icon notika-house"></i>
+									</div>
+									<div class="breadcomb-ctn">
+										<h2>All Inspection by {{data.user.firstName}} {{data.user.lastName}}</h2>
+										<p>List of Inspections conducted by the Highway Inspector</span></p>
+									</div>
+								</div>
+							</div>
+							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-3">
+								<div class="breadcomb-report">
+									<button data-toggle="tooltip" data-placement="left" title="Download Report" class="btn"><i class="notika-icon notika-sent"></i></button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Breadcomb area End-->
+    <!-- Server time start-->
+    <div class="visitor-sv-tm-area">
+        <div class="container">
+            <div class="row">
+                
+            </div>
+        </div>
+    </div>
+    <!-- Server time End-->
+    <!-- Search Engine Start-->
+    <div class="search-engine-area mg-t-30" >
+        <div class="container" style="margin-bottom:150px;">
+            <div class="row">
+                {{#each data.highwayContracts.data}}
+                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12" style="margin-top:40px">
+                    <div class="search-engine-int">
+                     
+                        <div class="contact-hd search-hd-eg">
+                            <h2>{{this.projectTitle}}</h2>
+                            <p>{{this.description}}</p>
+                        </div>
+                        <div class="search-eg-table">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Parameters</th>
+                                        <th class="text-right">Values</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><img class="search-engine-img" src="img/search-engines/google.png" alt="">prioritized</td>
+                                        <td class="text-right">{{this.prioritize}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><img class="search-engine-img" src="img/search-engines/bing.png" alt="">State</td>
+                                        <td class="text-right">{{this.state}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><img class="search-engine-img" src="img/search-engines/bing.png" alt="">LGA</td>
+                                        <td class="text-right">{{this.lga}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><img class="search-engine-img" src="img/search-engines/yahoo.png" alt="">Contract Type</td>
+                                        <td class="text-right">{{this.contractType}}</i></td>
+                                    </tr>
+                                    <tr>
+                                        <td><img class="search-engine-img" src="img/search-engines/duckduckgo.png" alt="">Project Length</td>
+                                        <td class="text-right">{{{currency this.projectLength}}}km</i></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="analysis-rd-mg"><img class="search-engine-img" src="img/search-engines/yandex.png" alt="">Contract Sum</td>
+                                        <td class="text-right analysis-rd-mg">₦{{{currency this.contractSum}}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="analysis-rd-mg"><img class="search-engine-img" src="img/search-engines/yandex.png" alt="">Current Percentage</td>
+                                        <td class="text-right analysis-rd-mg">{{{approximator this.currentPercentage}}}%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                {{/each}}
+
+
+
+
+            </div>
+        </div>
+    </div>
+    

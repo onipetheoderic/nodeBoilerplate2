@@ -169,17 +169,6 @@ exports.datasheet_inspection_type = function(req, res){
     })
 }
 
-exports.create_datasheet_report_post = function(req, res){
-    DatasheetComponent.insertMany(req.body, function (err, docs) {
-        if (err){
-            return console.error(err);
-            res.status(400).json(err);
-        } else {       
-          res.status(200).json(docs);
-        }
-    });
-}
-
 
 
 exports.view_inspections = function(req, res){
@@ -235,7 +224,63 @@ exports.message_inspector_get = function(req, res){
     notificationSeen: {type:Boolean, default:false},
     read: {type:Boolean, default:false}
 */ 
+
+exports.broadcast_message = function(req, res) {
+    if(!req.session.hasOwnProperty("user_id")){
+        console.log("its working", req.session.user_id)
+        res.redirect('/login')
+    }
+    else if(req.session.hasOwnProperty("user_id")){
+    let decrypted_user_id = decrypt(req.session.user_id, req, res)
+        User.find({ userType: "siteEngineer"}, function(err, users){
+            //message.recieverId will be each User Id
+            for(var i in users){
+                let message = new Message();
+                message.senderId = decrypted_user_id;
+                message.recieverId = users[i]._id;
+                message.subject = req.body.subject;
+                message.message = req.body.message;
+                message.save(function(err, msg){
+                    if(err){
+                        console.log(err)
+                    }
+                    else {
+                        console.log(msg, "successfully sent")
+                    }
+                });
+            }
+            res.redirect('/')
+
+        })
+    }
+}
+
+
+
 exports.message_inspector_post = function(req, res){
+    if(!req.session.hasOwnProperty("user_id")){
+        console.log("its working", req.session.user_id)
+        res.redirect('/login')
+    }
+    else if(req.session.hasOwnProperty("user_id")){
+    let decrypted_user_id = decrypt(req.session.user_id, req, res)
+    let message = new Message();
+    message.senderId = decrypted_user_id;
+    message.recieverId = req.body.recieverId;
+    message.subject = req.body.subject;
+    message.message = req.body.message;
+    message.save(function(err, auth_details){
+        if(err){
+            console.log(err)
+        }
+        else {
+            res.render('Admin/dashboard/successpage', {layout: false, message:{successMessage: `Message Successfully Sent`, successDescription: `Message has been successfully sent to the Highway Official`} })
+        }
+    });
+}
+}
+
+exports.send_message_to_inspector_post = function(req, res){
     if(!req.session.hasOwnProperty("user_id")){
         console.log("its working", req.session.user_id)
         res.redirect('/login')
@@ -306,10 +351,80 @@ exports.read_messages_get = function(req, res){
     });
 }
 }
+
+/*
+
+allComponents.push(req.body)
+console.log("this are all the components pushed", allComponents)
+*/ 
+
+exports.create_datasheet_report_post = function(req, res){
+    for(var i in req.body){
+        allComponents.push(req.body[i])
+    }
+    DatasheetComponent.insertMany(req.body, function (err, docs) {
+        if (err){
+            return console.error(err);
+            res.status(400).json(err);
+        } else {       
+          res.status(200).json(docs);
+
+          console.log("this are the components ",allComponents)
+        }
+    });
+}
+
+exports.send_message_to_engineer_page = function(req, res) {
+    User.findOne({_id:req.params.id}, function(err, user){
+        res.render('Admin/dashboard/send_message_to_engineer_page', 
+        {layout: "layout/admin3", highway_id:req.params.id, userDetails:user})
+    })
+}
+
+exports.all_highway_contracts_page = function(req, res) {
+    //here we use the siteengineers id to query the contracts db in the contracts panel
+    //lets get userdetails
+    User.findOne({_id:req.params.id}, function(err, user){
+        console.log("this iis tthe highway instpectr",user)
+        const myUrl = BASEURL+'/get_all_highway_contracts_by_highway_id/' + req.params.id;
+        Request.get({url: myUrl}, (error, response, body) => {
+            // console.log("this is the response",response)
+            if(error) {
+                return console.log(error);
+            }
+           
+            // console.log(body)
+            const allHighways = JSON.parse(body)
+            console.log("this is the body", allHighways)
+        //    let parsedJSON = JSON.parse(body)
+        //    let projectLength = parseInt(parsedJSON.data)
+
+           res.render('Admin/dashboard/all_highway_contracts_page', {layout: "layout/chatlayout", data:{user:user, highwayContracts:allHighways}})
+        })
+       
+    })  
+}
+
+
+
+/*
+
+
+// 1 + 2 + 3 + 4
+console.log(array1.reduce(reducer));
+*/ 
+var percentager = (count, total, projectLength) => {
+    let supposedTotal = projectLength*count
+    return (total/supposedTotal)*100
+}
+var reducer = (accumulator, currentValue) => accumulator + currentValue;
 exports.edit_datasheet_report_post = function(req, res){
-    console.log("this is the body of the Ajax call",req.body)
-    console.log("single document", req.body[0].datasheet_id)
-   
+    var allComponents = []
+    for(var i in req.body){
+        if(req.body[i].component_score!=undefined){
+            allComponents.push(parseInt(req.body[i].component_score))
+        }       
+    }
     DatasheetComponent.deleteMany({datasheet_id: req.body[0].datasheet_id}, function (err) {
         if(err){
              res.status(200).json(docs);
@@ -320,21 +435,55 @@ exports.edit_datasheet_report_post = function(req, res){
                     return console.error(err);
                     res.status(400).json(err);
                 } else {       
-                  res.status(200).json(docs);
+                    console.log("this are the components ",allComponents)
+                    Datasheet.findOne({_id: req.body[0].datasheet_id}, function(err, datasheet){
+                        console.log("this is the datasheet", datasheet)
+                        let total = allComponents.reduce(reducer);
+                        let myUrl = BASEURL + "/get_contract_percentage/"+datasheet.contract_id
+                        const myUrl2 = `${BASEURL}/modify_percentage_of_highway_contract`
+                        
+                        Request.get({url: myUrl}, (error, response, body) => {
+                            // console.log("this is the response",response)
+                            if(error) {
+                                return console.log(error);
+                            }       
+                           let parsedJSON = JSON.parse(body)
+                           let projectLength = parseInt(parsedJSON.data)
+
+                           console.log(`these are the count, total, project length ${allComponents.length}, ${total}, ${projectLength}`)
+                           let projectPercentage = percentager(allComponents.length, total, projectLength)
+
+                            let contract_id = datasheet.contract_id;
+                            Request.post({
+                                "headers": { "content-type": "application/json" },
+                                "url": myUrl2,
+                                "body": JSON.stringify({
+                                "percentage": projectPercentage,
+                                "contract_id": contract_id
+                            })
+                            }, (error, response, body) => {
+                            // console.log(error, response, body)
+                            if(error) {
+                                console.log(error)
+                            }
+                            else{
+                                 res.status(200).json(docs);
+                            }        
+
+                            });
+                  
+                        })
+                    })
                 }
             });
         }
-      
-    
 })
 }
 
 
 
 exports.inspection_report = function(req, res){
-    console.log("route reached", req.params.id)
     if(!req.session.hasOwnProperty("user_id")){
-        console.log("its working", req.session.user_id)
         res.redirect('/login')
     }
     else if(req.session.hasOwnProperty("user_id")){
@@ -377,7 +526,6 @@ exports.create_inspection_data_sheet = function(req, res){
 
         console.log("result off the query", datasheet)
         if(datasheet===null){
-            console.log("++++++++++++++++++No datasheet is existing creating a new one")
                 let datasheet = new Datasheet();
                 datasheet.name = req.body.name;
                 datasheet.contract_id = req.body.contract_id;
@@ -396,7 +544,6 @@ exports.create_inspection_data_sheet = function(req, res){
         }
         else {
             Datasheet.findOne({contract_id:req.body.contract_id}, function(err, existingDatasheet){
-                console.log("++++++++++++++++++++++++Already esisting datashit")
                 res.redirect('/datasheet_inspection_type/'+ existingDatasheet._id)
             })
             
@@ -406,8 +553,6 @@ exports.create_inspection_data_sheet = function(req, res){
 }
 
 exports.get_contract_datas = function(req, res) {
-    delete res._headers['set-cookie'];
-    console.log("this si the request", req)
     //this method is to use the contract id to get the dataset
     Datasheet.findOne({contract_id: req.params.contract_id}, function(err, datasheet){       
         if(datasheet!=null){
@@ -436,10 +581,8 @@ exports.modify_highway_contract_percentage = function(req, res){
         // console.log("this is the response",response)
         if(error) {
             return console.log(error);
-        }
-        console.log(body)
+        }       
         const allContracts = JSON.parse(body)
-        console.log("allContracts", allContracts)
         res.render('Admin/dashboard/modify_highway_contract_percentage', {layout: "layout/assign", data:{contracts:allContracts}})
     });
 
@@ -450,8 +593,7 @@ exports.modify_highway_contract_percentage_post = function(req, res){
     
     const myUrl = `${BASEURL}/modify_percentage_of_highway_contract`
     let decrypted_user_id = decrypt(req.session.user_id, req, res)
-    console.log("this is the decrypted user_id",decrypted_user_id)
-    console.log("this is the parameters sent", req.body)
+   
     let currentPercentage = req.body.percentage;
     let contract_id = req.body.contract_id;
     Request.post({
@@ -480,7 +622,6 @@ exports.modify_highway_contract_percentage_post = function(req, res){
 
 exports.assign_highway_contracts_post = function(req, res) {
    
-    console.log("this are the request",req.body)
     const myUrl = `${BASEURL}/assign_highway_to_contract`
     let userDetail = req.body.user.split(",")
     let userId = userDetail[0]
@@ -499,7 +640,6 @@ exports.assign_highway_contracts_post = function(req, res) {
            console.log(error)
         }
         else{
-            console.log(JSON.parse(body));
             let data = JSON.parse(body)
             res.render('Admin/dashboard/successpage', {layout: false, message:{successMessage: `${data.data.projectTitle} has been Assigned`, successDescription: `${data.data.projectTitle} has been Assigned to ${inspectorFullname}`} })
             

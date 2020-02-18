@@ -176,7 +176,7 @@ body {}
   font-weight: normal;
   font-style: normal;
 }
-.sale-statistic-inner, .statistic-right-area, .email-statis-inner, .recent-post-wrapper, .blog-inner-list, .realtime-wrap, .add-todo-list, .notika-chat-list, .recent-signup-inner, .ongoing-task-inner, .contact-inner, .contact-form, .widget-tabs-int, .visitor-sv-tm-int, .search-engine-int, .alert-inner, .color-wrap, .wizard-wrap-int, .dropdown-list, .modals-list, .accordion-wn-wp, .tooltips-inner, .popovers-list, .typography-list, .typography-heading, .typography-inline-pro, .tpgp-helper, .contact-list, .inbox-left-sd, .inbox-text-list, .view-mail-list, .normal-table-list, .data-table-list, .form-element-list, .range-slider-wrap, .datepicker-int, .colorpicker-int, .summernote-wrap, .dropdone-nk, .form-example-wrap, .invoice-wrap, .google-map-single, .data-map-single, .image-cropper-wp, .nk-cd-ed-wp, .bar-chart-wp, .line-chart-wp, .area-chart-wp, .flot-chart-wp, .wb-traffic-inner, .notika-icon-int{
+.sale-statistic-inner, .statistic-right-area, .email-statis-inner, .recent-post-wrapper, .blog-inner-list, .realtime-wrap, .add-todo-list, .notika-menus-list, .recent-signup-inner, .ongoing-task-inner, .contact-inner, .contact-form, .widget-tabs-int, .visitor-sv-tm-int, .search-engine-int, .alert-inner, .color-wrap, .wizard-wrap-int, .dropdown-list, .modals-list, .accordion-wn-wp, .tooltips-inner, .popovers-list, .typography-list, .typography-heading, .typography-inline-pro, .tpgp-helper, .contact-list, .inbox-left-sd, .inbox-text-list, .view-mail-list, .normal-table-list, .data-table-list, .form-element-list, .range-slider-wrap, .datepicker-int, .colorpicker-int, .summernote-wrap, .dropdone-nk, .form-example-wrap, .invoice-wrap, .google-map-single, .data-map-single, .image-cropper-wp, .nk-cd-ed-wp, .bar-chart-wp, .line-chart-wp, .area-chart-wp, .flot-chart-wp, .wb-traffic-inner, .notika-icon-int{
 	padding:20px;
 	background:#fff;
 }
@@ -878,13 +878,13 @@ ul.notika-menu-wrap li a{
     top: 0;
     width: 16px;
 }
-.notika-todo-btn a, .notika-add-todo, .notika-chat-btn{
+.notika-todo-btn a, .notika-add-todo, .notika-menus-btn{
 	font-size:14px;
 	color:#fff;
 	border:none;
 	background:#00c292;
 }
-.notika-todo-btn a:hover, .notika-todo-btn a:active, .notika-todo-btn a:focus, .notika-add-todo:hover, .notika-add-todo:active, .notika-add-todo:focus, .notika-add-todo:visited, .notika-chat-btn:hover, .notika-chat-btn:active, .notika-chat-btn:focus, .notika-chat-btn:visited{
+.notika-todo-btn a:hover, .notika-todo-btn a:active, .notika-todo-btn a:focus, .notika-add-todo:hover, .notika-add-todo:active, .notika-add-todo:focus, .notika-add-todo:visited, .notika-menus-btn:hover, .notika-menus-btn:active, .notika-menus-btn:focus, .notika-menus-btn:visited{
 	color:#fff;
 	background:#00c292;
 	outline:none;
@@ -3707,14 +3707,14 @@ textarea.auto-size {
 .btn-float:not(.bgm-white):not(.bgm-gray)>i{
     color:#fff;
 }
-.btn-login.btn-success, .images-cropper-pro .btn, .images-action-pro .btn, .notika-todo-btn .btn, .btn.notika-add-todo, .btn.notika-chat-btn{
+.btn-login.btn-success, .images-cropper-pro .btn, .images-action-pro .btn, .notika-todo-btn .btn, .btn.notika-add-todo, .btn.notika-menus-btn{
 	background-color: #00c292;
     border-color: #00c292;
 	border:0px solid #ccc;
 	outline:none;
 	box-shadow:none;
 }
-.btn-login.btn-success:hover, .btn-login.btn-success:focus, .btn-login.btn-success:active, .images-cropper-pro .btn:hover, .images-cropper-pro .btn:focus, .images-cropper-pro .btn:active, .images-action-pro .btn:hover, .images-action-pro .btn:focus, .images-action-pro .btn:active, .notika-todo-btn .btn:hover, .notika-todo-btn .btn:focus, .notika-todo-btn .btn:active, .btn.notika-add-todo:hover, .btn.notika-add-todo:focus, .btn.notika-add-todo:active, .btn.notika-chat-btn:hover, .btn.notika-chat-btn:focus, .btn.notika-chat-btn:active{
+.btn-login.btn-success:hover, .btn-login.btn-success:focus, .btn-login.btn-success:active, .images-cropper-pro .btn:hover, .images-cropper-pro .btn:focus, .images-cropper-pro .btn:active, .images-action-pro .btn:hover, .images-action-pro .btn:focus, .images-action-pro .btn:active, .notika-todo-btn .btn:hover, .notika-todo-btn .btn:focus, .notika-todo-btn .btn:active, .btn.notika-add-todo:hover, .btn.notika-add-todo:focus, .btn.notika-add-todo:active, .btn.notika-menus-btn:hover, .btn.notika-menus-btn:focus, .btn.notika-menus-btn:active{
 	background-color: #00c292;
     border-color: #00c292;
 	border:0px solid #ccc;
@@ -4056,7 +4056,7 @@ textarea.auto-size {
 .todo-flex{
 	display:flex;
 }
-.btn.notika-add-todo, .btn.notika-chat-btn{
+.btn.notika-add-todo, .btn.notika-menus-btn{
 	border-radius: 0px;
     position: relative;
     top: 2px;

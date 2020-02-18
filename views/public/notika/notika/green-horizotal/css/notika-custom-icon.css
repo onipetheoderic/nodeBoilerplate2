@@ -66,7 +66,7 @@
 .notika-calendar:before {
   content: "\e904";
 }
-.notika-chat:before {
+.notika-menus:before {
   content: "\e905";
 }
 .notika-checked:before {

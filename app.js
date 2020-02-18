@@ -365,7 +365,17 @@ hbs.registerHelper('link', function(text, options) {
 });
 
 
+hbs.registerHelper('currency', function(x) {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+)
 
+hbs.registerHelper('approximator', function(num){
+  let newNum = num.toFixed(2)
+  return newNum
+ })
+
+ 
 http.listen(port, function(){//this takes a callback, that is if we want to run something when we start listening to the port
 	console.log("Listening on Port:", port);
 });

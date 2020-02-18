@@ -45,6 +45,9 @@ router.route('/all_highway_inspectors')
 router.route('/view_inspections')
     .get(AuthDashboard.view_inspections)
 
+router.route('/broadcast_message')
+    .post(AuthDashboard.broadcast_message)
+
 router.route('/read_messages_get/:id')
     .get(AuthDashboard.read_messages_get)
 
@@ -104,9 +107,15 @@ router.route('/get_contract_datas/:contract_id')
 router.route('/inspection_report/:id/:datasheet_id')
     .get(AuthDashboard.inspection_report)
 
+router.route('/send_message_to_engineer_page/:id')
+    .get(AuthDashboard.send_message_to_engineer_page)
+
     //inspection_type  //create_datasheet_report_post
 router.route('/create_datasheet_report_post')
     .post(AuthDashboard.create_datasheet_report_post)
+
+router.route('/all_highway_contracts_page/:id')
+    .get(AuthDashboard.all_highway_contracts_page)
 
 router.route('/changePassword')
     .get(AuthDashboard.changePassword_get)
