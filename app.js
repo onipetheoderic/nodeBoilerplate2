@@ -165,7 +165,47 @@ app.use(function(req, res, next) {
 hbs.registerHelper('json', function (content) {
     return JSON.stringify(content);
 });
+/*
+rams_structure_key: 'Ut deleniti eum expl', structure_name: 'Chava Norman', zone: 'Nostrum a in iste er', 
+state: 'Reiciendis quis iust', road_number: '993', road_name: 'Zelda Montoya', 
+*/ 
+hbs.registerHelper('rams', function(cont){
+  let content = JSON.parse(JSON.stringify(cont))
+  if(content[0]!==undefined){
+   let rams_structure_key = content[0].rams_structure_key
+    return rams_structure_key
+  }
+  else return;
+  
+})
 
+hbs.registerHelper('structure', function(cont){
+  let content = JSON.parse(JSON.stringify(cont))
+  if(content[0]!==undefined){
+   let structure_name = content[0].structure_name
+    return structure_name
+  }
+  else return;
+  
+})
+hbs.registerHelper('state', function(cont){
+  let content = JSON.parse(JSON.stringify(cont))
+  if(content[0]!==undefined){
+   let structure_name = content[0].state
+    return structure_name
+  }
+  else return;
+  
+})
+hbs.registerHelper('zone', function(cont){
+  let content = JSON.parse(JSON.stringify(cont))
+  if(content[0]!==undefined){
+   let structure_name = content[0].zone
+    return structure_name
+  }
+  else return;
+  
+})
 
 hbs.registerHelper('json2', function(context) {
   console.log("from app.js",context)

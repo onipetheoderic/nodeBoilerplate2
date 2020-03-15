@@ -1,0 +1,109 @@
+<!-- Main Menu area End-->
+    <!-- Start Status area -->
+    <div class="notika-status-area" style="margin-bottom:20%">
+        <div class="container">
+            <div class="row">
+<h2>{{data.single_datasheet.structure_name}}</h2>
+
+
+                        <div class="table-responsive">
+                            <table id="data-table-basic" class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th style="font-size: 10px;">Information</th>
+                                        <th style="font-size: 10px;">Values</th>
+                                        
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    <tr>
+                                        <td style="font-size: 10px;">Rams Structure Key</td>
+                                        <td style="font-size: 10px;">{{data.single_datasheet.rams_structure_key}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-size: 10px;">Structure Name</td>
+                                        <td style="font-size: 10px;">{{data.single_datasheet.structure_name}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-size: 10px;">Zone</td>
+                                        <td style="font-size: 10px;">{{data.single_datasheet.zone}}</td>
+                                    </tr>
+                                     <tr>
+                                        <td style="font-size: 10px;">State</td>
+                                        <td style="font-size: 10px;">{{data.single_datasheet.state}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-size: 10px;">Road Number</td>
+                                        <td style="font-size: 10px;">{{data.single_datasheet.road_number}}</td>
+                                    </tr>
+     
+                                    <tr>
+                                        <td style="font-size: 10px;">Road Name</td>
+                                        <td style="font-size: 10px;">{{data.single_datasheet.road_name}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-size: 10px;">GPS Latitude</td>
+                                        <td style="font-size: 10px;">{{data.single_datasheet.gps_latitude}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-size: 10px;">GPS Longitude</td>
+                                        <td style="font-size: 10px;">{{data.single_datasheet.gps_longitude}}</td>
+                                    </tr>
+                                     <tr>
+                                        <td style="font-size: 10px;">Recorded By</td>
+                                        <td style="font-size: 10px;">{{data.single_datasheet.recorded_by}}</td>
+                                    </tr>
+                                     <tr>
+                                        <td style="font-size: 10px;">Checked By</td>
+                                        <td style="font-size: 10px;">{{data.single_datasheet.checked_by}}</td>
+                                    </tr>
+                                     <tr>
+                                        <td style="font-size: 10px;">Created At</td>
+                                        <td style="font-size: 10px;">{{data.single_datasheet.createdAt}}</td>
+                                    </tr>
+                                </tbody>
+                               
+                            </table>
+                            </div>
+
+
+<div class="table-responsive">
+    <table id="data-table-basic" class="table table-striped">
+        <thead>
+        <tr>
+            <th style="font-size: 10px;">Problems</th>
+            <th style="font-size: 10px;">Severity</th>
+            <th style="font-size: 10px;">Extent</th>
+            <th style="font-size: 10px;">Urgency</th>
+            
+        </tr>
+    </thead>
+    <tbody>
+    {{#each data.datasheets_components}}
+<tr>
+    <td style="font-size: 10px;">{{this.problem_name}}</td>
+    <td style="font-size: 10px;">{{this.severity}}</td>
+      <td style="font-size: 10px;">{{this.extent}}</td>
+      {{#if this.urgent}}
+       <td style="font-size: 10px; color:red;">{{this.urgent}}</td>
+   
+      {{else}}
+       <td style="font-size: 10px;">{{this.urgent}}</td>
+    {{/if}}
+    
+   
+</tr>
+    {{/each}}
+ </tbody>
+</table>
+</div>
+
+            </div>
+
+        </div>
+    </div>
+    
+    <!-- End Email Statistic area-->
+    <!-- Start Realtime sts area-->
+    

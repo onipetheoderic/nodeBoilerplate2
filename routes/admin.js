@@ -3,12 +3,23 @@ import express from 'express';
 //percentage_completion
 import AdminDashboardController from '../controllers/dashboard/admin'
 import AuthDashboard from '../controllers/auth';
-
+import ApiController from '../controllers/api';
 
 const router = express.Router();
 
+router.route('/api/login')
+    .post(ApiController.login_post)
+
+router.route('/api/datasheet_select')
+    .get(ApiController.datasheet_select)
 
 
+router.route('/api/inspection_datasheet/:id')
+    .get(ApiController.create_inspection_data_sheet)
+
+router.route('/api/edit_single_component')
+    .post(ApiController.edit_single_component)
+    
 router.route('/')
     .get(AdminDashboardController.home)
 
@@ -42,11 +53,17 @@ router.route('/view_recieved_messages_get')
 router.route('/all_highway_inspectors')
     .get(AuthDashboard.all_highway_inspectors)
 
+router.route('/create_completed_datasheet')
+    .post(AuthDashboard.create_completed_datasheet)
+
 router.route('/view_inspections')
     .get(AuthDashboard.view_inspections)
 
 router.route('/broadcast_message')
     .post(AuthDashboard.broadcast_message)
+
+router.route('/select_completed_type')
+    .get(AuthDashboard.select_completed_type)
 
 router.route('/read_messages_get/:id')
     .get(AuthDashboard.read_messages_get)
@@ -98,6 +115,24 @@ router.route('/datasheet_inspection_type/:id')
 router.route('/edit_datasheet_report_post')
     .post(AuthDashboard.edit_datasheet_report_post)
 
+router.route('/all_urgency')
+    .get(AdminDashboardController.all_urgency)
+    
+//create_completed_inspection_datasheet
+router.route('/create_completed_inspection_datasheet/:id')
+    .post(AuthDashboard.create_completed_inspection_datasheet_post)
+
+router.route('/finish_completed_datasheet/:id')
+    .get(AuthDashboard.finish_completed_datasheet_get)
+    .post(AuthDashboard.finish_completed_datasheet_post)
+
+router.route('/view_completed_datasheet')
+    .get(AuthDashboard.view_completed_datasheet)
+
+
+router.route('/single_completed_datasheet/:id')
+    .get(AuthDashboard.single_completed_datasheet)
+
 router.route('/inspection_category')
     .get(AdminDashboardController.inspection_category )
 
@@ -106,6 +141,11 @@ router.route('/get_contract_datas/:contract_id')
 
 router.route('/inspection_report/:id/:datasheet_id')
     .get(AuthDashboard.inspection_report)
+
+
+router.route('/completed_datasheet_inspection_type/:id/:project_type')
+    .get(AuthDashboard.create_completed_inspection_datasheet)
+
 
 router.route('/send_message_to_engineer_page/:id')
     .get(AuthDashboard.send_message_to_engineer_page)

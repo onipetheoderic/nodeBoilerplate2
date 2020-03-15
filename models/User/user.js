@@ -11,6 +11,8 @@ var UserSchema = new mongoose.Schema({
 	token: String,
     suspended: String,
     roles: Array,
+    app_logged_in: {type:Boolean, default:false},
+    auth_token: String,
     userType: String,
     
 

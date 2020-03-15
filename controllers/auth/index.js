@@ -7,6 +7,8 @@ import sha512 from 'sha512';
 import InspectionType from '../../models/InspectionType/inspectionType';
 import InspectionComponent from '../../models/Component/component';
 import Datasheet from '../../models/Datasheet/datasheet';
+import CompletedComponent from '../../models/CompletedComponent/completedComponent';
+import CompletedDatasheet from '../../models/CompletedDatasheet/completedDatasheet';
 import Component from '../../models/Component/component';
 import Image from '../../models/Image/image';
 import DatasheetComponent from '../../models/DatasheetComponent/datasheetComponent';
@@ -225,6 +227,11 @@ exports.message_inspector_get = function(req, res){
     read: {type:Boolean, default:false}
 */ 
 
+
+exports.select_completed_type = function(req, res) {
+    res.render('Admin/dashboard/select_completed_type', {layout: "layout/admin3"})
+}
+
 exports.broadcast_message = function(req, res) {
     if(!req.session.hasOwnProperty("user_id")){
         console.log("its working", req.session.user_id)
@@ -418,6 +425,7 @@ var percentager = (count, total, projectLength) => {
     return (total/supposedTotal)*100
 }
 var reducer = (accumulator, currentValue) => accumulator + currentValue;
+
 exports.edit_datasheet_report_post = function(req, res){
     var allComponents = []
     for(var i in req.body){
@@ -512,6 +520,163 @@ exports.inspection_report = function(req, res){
 
 }
 
+/*
+ name: {type:String, required: true},
+    highway_inspector_id: String,
+    project_type: String,
+    comment: String,
+    images: Array,
+*/ 
+exports.create_completed_datasheet = function(req, res) {
+    //Create a Completed Inspection Datasheet
+    if(!req.session.hasOwnProperty("user_id")){
+        console.log("its working", req.session.user_id)
+        res.redirect('/login')
+    }
+    else if(req.session.hasOwnProperty("user_id")){
+        let decrypted_user_id = decrypt(req.session.user_id, req, res)
+        let datasheet = new Datasheet();
+        datasheet.name = req.body.name;
+        datasheet.highway_inspector_id = decrypted_user_id
+        datasheet.project_type = req.body.project_type
+        datasheet.save(function(err, datasheet_details){       
+            if(err){
+               res.redirect("/")
+                return;
+            } else { 
+               //we get everything that is related to the bridge by searching the component db
+               res.redirect(`/completed_datasheet_inspection_type/${datasheet_details._id}/${req.body.project_type}`)
+            }
+        });
+    }
+}
+
+
+
+exports.create_completed_inspection_datasheet_post = function(req, res){
+    // console.log("this are the requests", req.params.id,  req.body)
+    if(!req.session.hasOwnProperty("user_id")){
+        console.log("its working", req.session.user_id)
+        res.redirect('/login')
+    }
+    else if(req.session.hasOwnProperty("user_id")){
+        let decrypted_user_id = decrypt(req.session.user_id, req, res)
+        let form = req.body
+        console.log(form)
+        let completedDatasheet = new CompletedDatasheet()
+        completedDatasheet.rams_structure_key = req.body.rams_structure_key;
+        completedDatasheet.structure_name = req.body.structure_name;
+        completedDatasheet.zone = req.body.zone;
+        completedDatasheet.state = req.body.state;
+        completedDatasheet.road_number = req.body.road_number;
+        completedDatasheet.road_name = req.body.road_name;
+        completedDatasheet.gps_latitude = req.body.gps_latitude;
+        completedDatasheet.gps_longitude = req.body.gps_longitude;
+        completedDatasheet.recorded_by = req.body.recorded_by;
+        completedDatasheet.checked_by = req.body.checked_by;
+        completedDatasheet.datasheet_id = req.params.id;
+        completedDatasheet.highway_inspector_id = decrypted_user_id;
+        completedDatasheet.save(function(err, submitedCompletedDatasheet){
+            if(err){
+                console.log(err)
+            }
+            else {
+                console.log(submitedCompletedDatasheet)
+                res.redirect(`/finish_completed_datasheet/${submitedCompletedDatasheet._id}`);
+            }
+        })
+    }
+}
+exports.finish_completed_datasheet_get = function(req, res){
+    if(!req.session.hasOwnProperty("user_id")){
+        console.log("its working", req.session.user_id)
+        res.redirect('/login')
+    }
+    else if(req.session.hasOwnProperty("user_id")){
+        Component.find({inspection_type_id: "completed_road"}, function(err, components){
+            res.render('Admin/dashboard/finish_completed_datasheet_get', {layout: false, data:{components:components, datasheet_id:req.params.id}})
+        })
+    }
+    
+}
+
+exports.finish_completed_datasheet_post = function(req, res) {
+    if(!req.session.hasOwnProperty("user_id")){
+        console.log("its working", req.session.user_id)
+        res.redirect('/login')
+    }
+    else if(req.session.hasOwnProperty("user_id")){
+        let decrypted_user_id = decrypt(req.session.user_id, req, res)
+        let completed_datasheet_id = req.params.id;
+        let form = req.body;
+        for(var i in form){
+            console.log(form[i][0])
+            const status = form[i][3]===undefined?false:true
+            console.log(status) 
+            let completedComponent = new CompletedComponent()
+            completedComponent.problem_name = form[i][0]
+            completedComponent.datasheet_id = completed_datasheet_id
+            completedComponent.severity = form[i][1]
+            completedComponent.extent = form[i][2]
+            completedComponent.urgent = status
+            completedComponent.highway_inspector_id = decrypted_user_id
+            completedComponent.save(function(err, component){
+                if(err){
+                    console.log(err)
+                }
+                else{
+                    console.log("saved", component)
+                }
+                
+            })
+    }
+    res.redirect('/')
+}
+}
+
+exports.view_completed_datasheet = function(req, res) {
+    //View completed Datasheets
+    CompletedDatasheet.find({}, function(err, completed_datasheets){
+        res.render('Admin/dashboard/view_completed_datasheets', {layout: "layout/admin3", data:{completed_datasheets:completed_datasheets}})
+    })
+}
+
+
+exports.single_completed_datasheet = function(req, res) {
+    let completed_datasheet_id = req.params.id;
+    CompletedDatasheet.findOne({_id:completed_datasheet_id})
+    .populate("datasheet_id")
+    .exec(function (err, single_datasheet) {
+        CompletedComponent.find({datasheet_id:single_datasheet._id}, function(err, datasheets_components){
+            console.log(datasheets_components)
+            res.render('Admin/dashboard/single_completed_datasheet', {layout: "layout/admin3", data:{single_datasheet:single_datasheet, datasheets_components:datasheets_components}})
+        })
+    });
+    
+}
+/*
+ exec(function (err, story) {          
+            res.json({datas:story, datasheet_details:datasheet})
+          });
+        
+
+*/ 
+exports.create_completed_inspection_datasheet = function(req,res){
+    if(!req.session.hasOwnProperty("user_id")){
+        console.log("its working", req.session.user_id)
+        res.redirect('/login')
+    }
+    else if(req.session.hasOwnProperty("user_id")){
+    let completed_datasheet_id = req.params.id;
+    let project_type = req.params.project_type;
+    console.log(completed_datasheet_id, project_type)
+    Component.find({inspection_type_id:project_type}, function(err, components){
+        console.log("this are the components", components)
+        res.render('Admin/dashboard/completed_inspection_datasheet', {layout: false, data:{components:components, completed_datasheet_id:completed_datasheet_id}})
+    })
+}
+
+}
 
 
 exports.create_inspection_data_sheet = function(req, res){
@@ -551,7 +716,6 @@ exports.create_inspection_data_sheet = function(req, res){
     })
 }
 }
-
 exports.get_contract_datas = function(req, res) {
     //this method is to use the contract id to get the dataset
     Datasheet.findOne({contract_id: req.params.contract_id}, function(err, datasheet){       
@@ -897,6 +1061,9 @@ exports.edit_user_profile_get = function(req, res) {
         //render4 the edit screen
     }
 }
+
+
+
 exports.edit_user_profile_post = function(req, res) {
     if(!req.session.hasOwnProperty("user_id")){
         console.log("its working", req.session.user_id)
@@ -923,19 +1090,7 @@ exports.edit_user_profile_post = function(req, res) {
 
 }
 
-//expecting req.params
 
-/*
-router.get('/delete_class/:id', (req, res) => {
-    let class_id = req.params.id;
-    Class.findByIdAndRemove({_id: req.params.id}, 
-       function(err, docs){
-        if(err) res.json(err);
-        else res.redirect('/admin/create_class');
-    });
- 
-})
-*/ 
 exports.delete_a_component_get = function(req, res) {
     if(!req.session.hasOwnProperty("user_id")){
         console.log("its working", req.session.user_id)

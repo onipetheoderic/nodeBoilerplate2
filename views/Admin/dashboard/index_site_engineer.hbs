@@ -1,6 +1,6 @@
 <!-- Main Menu area End-->
     <!-- Start Status area -->
-
+    <link rel="stylesheet" href="/Admin/assets/css/jquery.dataTables.min.css">
     <div class="notika-status-area">
         <div class="container">
     
@@ -79,10 +79,73 @@
                            <div class="sparkline-bar-stats1">9,4,8,6,5,6,4,8,3,5,9,5</div>
                     </div>
                 </div>
+                 <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12" style="margin-bottom:5px; margin-top:5px;">
+                    <div class="wb-traffic-inner notika-shadow sm-res-mg-t-30 tb-res-mg-t-30">
+                        <div class="website-traffic-ctn">                            
+                            <h2 data-toggle="modal" data-target="#myModaltwo">Upload Completed Datasheet Project</h2>
+                            
+                            <p style="font-size:11px">Upload Completed Datasheet Files</p>                        
+                        </div>
+                        
+                           <div class="sparkline-bar-stats1">9,4,8,6,5,6,4,8,3,5,9,5</div>
+                    </div>
+                </div>
                
                 
+{{!--  name: {type:String, required: true},
+    highway_inspector_id: String,
+    project_type: String,
+    comment: String,
+    images: Array, --}}
+ <div class="modal fade" id="myModaltwo" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <h2>Completed Datasheet</h2>
+                <p>Quickly Create A Completed Datasheet or Update A Datasheet</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModalForm">Create A Datasheet</button>
+                <br><br>
+                <a href="/view_completed_datasheet"><button type="button" class="btn btn-default">View all Completed Inspection datasheet</button></a>
+            </div>
+        </div>
+    </div>
+</div>
 
 
+ <div class="modal fade" id="myModalForm" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <form action="/create_completed_datasheet" method="POST" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    
+                    <h2>Quickly fill in the Informations below</h2>
+                    <div class="nk-int-st">
+                        <input type="text" name="name" class="form-control input-sm" placeholder="Enter Name of Inspection">
+                    </div>  
+                    <p>select Inspection Type</p>
+                    <div class="chosen-select-act fm-cmp-mg">
+                        <select class="project_type" name="project_type" data-placeholder="select Project type">                       
+                                <option value="completed_road">Completed Road</option> 
+                                <option value="completed_bridge">Completed Bridge</option>                        
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-default">Create Completed Datasheet</button>
+                    
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
             </div>
 
         </div>
@@ -144,181 +207,96 @@
     </div>
     <!-- End Sale Statistic area-->
     <!-- Start Email Statistic area-->
+
+
     <div class="notika-email-post-area" style="margin-top:0px">
+
+
+
+
+
+
+
+
+
+
+
+
         <div class="container">
             <div class="row">
                 
-                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
-                    <div class="recent-post-wrapper notika-shadow sm-res-mg-t-30 tb-res-ds-n dk-res-ds">
-                        <div class="recent-post-ctn">
+
+
+
+<div class="recent-post-ctn">
                             <div class="recent-post-title">
                                 <h2 style="color:red">Roads/Bridges That Needs repair</h2>
                             </div>
                         </div>
-                        <div class="recent-post-items">
-                             <div class="recent-post-signle">
-                                <a href="#">
-                                    <div class="recent-post-flex">
-                                        <div class="recent-post-img">
-                                            <img src="/Admin/assets/img/post/2.jpg" alt="" />
-                                        </div>
-                                        <div class="recent-post-it-ctn">
-                                            <h2>Abuja-keffi Road(North Central, Abuja)</h2>
-                                            <p>The bridge is currently not Okay. It has suffered from structural damage, which affected the reinforcement</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="recent-post-signle">
-                                <a href="#">
-                                    <div class="recent-post-flex rct-pt-mg">
-                                         <div class="recent-post-img">
-                                            <img src="/Admin/assets/img/post/2.jpg" alt="" />
-                                        </div>
-                                         <div class="recent-post-it-ctn">
-                                            <h2>Shagam Road(North Central, Abuja)</h2>
-                                            <p>The road has alot of unfixed potholes that need immediate attention</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="recent-post-signle">
-                                <a href="#">
-                                    <div class="recent-post-flex rct-pt-mg">
-                                         <div class="recent-post-img">
-                                            <img src="/Admin/assets/img/post/2.jpg" alt="" />
-                                        </div>
-                                        <div class="recent-post-it-ctn">
-                                            <h2>Kuchi road (Kebbe Sokoto)</h2>
-                                            <p>The road connecting kuchi to rara need immediate attention</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="recent-post-signle">
-                                <a href="#">
-                                    <div class="recent-post-flex rct-pt-mg">
-                                         <div class="recent-post-img">
-                                            <img src="/Admin/assets/img/post/2.jpg" alt="" />
-                                        </div>
-                                         <div class="recent-post-it-ctn">
-                                            <h2>Kaduna-road(North Central, Kaduna)</h2>
-                                            <p>The Road is currently not In good condition. It has suffered from structural damage, which affected the reinforcement</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="recent-post-signle">
-                                <a href="#">
-                                    <div class="recent-post-flex rct-pt-mg">
-                                         <div class="recent-post-img">
-                                            <img src="/Admin/assets/img/post/2.jpg" alt="" />
-                                        </div>
-                                         <div class="recent-post-it-ctn">
-                                            <h2>Alakija Road(Victoria Island, Lagos)</h2>
-                                            <p>The Road is currently Hazardous. It has suffered from structural damage, which affected the reinforcement</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="recent-post-signle">
-                                <a href="#">
-                                    <div class="recent-post-flex rc-ps-vw">
-                                        <div class="recent-post-line rct-pt-mg">
-                                            <p>View All</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
+ <div class="data-table-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="data-table-list">
+                      
+                        <div class="table-responsive">
+                            <table id="data-table-basic" class="table table-striped">
+                                <thead>
+                                    <tr><th>Rams Structure Key</th>
+                                    <th>Structure Name</th>
+                                        <th>Problem Name</th>
+                                        <th>Severity</th>
+                                        <th>Extent</th>
+                                        <th>Urgency</th>
+                                        <th>Date</th>
+                                       
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {{#each all_urgent_records}}
+                                        <tr>
+                                           
+                                              <td>{{{rams this.datasheet_id}}}</td>
+                                               <td>{{{structure this.datasheet_id}}}</td>
+                                            <td>{{this.problem_name}}</td>
+                                          <td>{{this.severity}}</td>
+                                           <td>{{this.extent}}</td>
+                                          
+                                            <td>{{this.urgent}}</td>
+                                            <td>{{this.createdAt}}</td>
+                                           
+                                        </tr>
+                                    {{/each}}
+                                     
+                               
+                                <tfoot>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Position</th>
+                                        <th>Office</th>
+                                        <th>Age</th>
+                                        <th>Start date</th>
+                                        <th>Salary</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                
                 </div>
                
-                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
-                    <div class="recent-post-wrapper notika-shadow sm-res-mg-t-30 tb-res-ds-n dk-res-ds">
-                        <div class="recent-post-ctn">
-                            <div class="recent-post-title">
-                                <h2 style="color:green">Roads In Good working Condition</h2>
-                            </div>
-                        </div>
-                        <div class="recent-post-items">
-                             <div class="recent-post-signle">
-                                <a href="#">
-                                    <div class="recent-post-flex">
-                                        <div class="recent-post-img">
-                                            <img src="/Admin/assets/img/post/2.jpg" alt="" />
-                                        </div>
-                                        <div class="recent-post-it-ctn">
-                                            <h2>Ademola Alakija Road(Victoria Island, Lagos)</h2>
-                                            <p>The road is currently in good working condition</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="recent-post-signle">
-                                <a href="#">
-                                    <div class="recent-post-flex rct-pt-mg">
-                                         <div class="recent-post-img">
-                                            <img src="/Admin/assets/img/post/2.jpg" alt="" />
-                                        </div>
-                                        <div class="recent-post-it-ctn">
-                                            <h2>Barracks(Ojuelegba, Lagos)</h2>
-                                            <p>The road is currently in good working condition</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="recent-post-signle">
-                                <a href="#">
-                                    <div class="recent-post-flex rct-pt-mg">
-                                         <div class="recent-post-img">
-                                            <img src="/Admin/assets/img/post/2.jpg" alt="" />
-                                        </div>
-                                          <div class="recent-post-it-ctn">
-                                            <h2>Barracks(Ojuelegba, Lagos)</h2>
-                                            <p>The road is currently in good working condition</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="recent-post-signle">
-                                <a href="#">
-                                    <div class="recent-post-flex rct-pt-mg">
-                                         <div class="recent-post-img">
-                                            <img src="/Admin/assets/img/post/2.jpg" alt="" />
-                                        </div>
-                                        <div class="recent-post-it-ctn">
-                                            <h2>Afeez</h2>
-                                            <p>This is the Current state of the Cubana Street, Kaduna</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="recent-post-signle">
-                                <a href="#">
-                                    <div class="recent-post-flex rct-pt-mg">
-                                         <div class="recent-post-img">
-                                            <img src="/Admin/assets/img/post/2.jpg" alt="" />
-                                        </div>
-                                        <div class="recent-post-it-ctn">
-                                            <h2>Barracks(Ojuelegba, Lagos)</h2>
-                                            <p>The road is currently in good working condition</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="recent-post-signle">
-                                <a href="#">
-                                    <div class="recent-post-flex rc-ps-vw">
-                                        <div class="recent-post-line rct-pt-mg">
-                                            <p>View All</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+               <!-- Data Table JS
+		============================================ -->
+    <script src="/Admin/assets/js/data-table/jquery.dataTables.min.js"></script>
+    <script src="/Admin/assets/js/data-table/data-table-act.js"></script>     
 
        
 

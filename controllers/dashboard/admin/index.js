@@ -4,6 +4,7 @@ const fs = require("fs");
 import InspectionType from '../../../models/InspectionType/inspectionType';
 import Component from '../../../models/Component/component';
 import User from '../../../models/User/user';
+import CompletedComponent from '../../../models/CompletedComponent/completedComponent'
 // TypeError: (0 , _index.AlexanderTheGreat) is not a function
 var randomstring = require("randomstring");
 var Request = require("request");
@@ -18,6 +19,15 @@ const filePlacerAndNamer = (req, res, the_file) => {
     return file_name
 }
 
+
+exports.all_urgency = function(req, res) {
+    CompletedComponent.find({urgent:true}).populate("datasheet_id")
+    .exec(function(err, all_records){
+        res.json(all_records);
+    })
+}
+
+
 exports.home = function(req, res) {    
     if(!req.session.hasOwnProperty("user_id")){      
         res.redirect('/login')
@@ -25,27 +35,32 @@ exports.home = function(req, res) {
     else if(req.session.hasOwnProperty("user_id")){
         let decrypted_user_id = decrypt(req.session.user_id, req, res)
         User.findOne({_id:decrypted_user_id}, function(err, user){
+
+            CompletedComponent.find({urgent:true}).populate("datasheet_id")
+            .sort({createdAt: 'desc'})
+            .exec(function(err, all_records){
+                console.log("all urgentRecords", all_records)
             const superAdmin = user.userType ==="superAdmin"?true:false;
             const siteEngineer = user.userType==="siteEngineer"?true:false;
             const permanentSecretary = user.userType ==="permanentSecretary"?true:false;
             const minister = user.userType === "minister"?true:false;
             const director = user.userType === "director"?true:false;
             if(superAdmin){
-                res.render('Admin/dashboard/index_superadmin', {layout: "layout/admin3", user:user, name:user.firstName})
+                res.render('Admin/dashboard/index_superadmin', {layout: "layout/admin3", user:user,all_urgent_records: all_records, name:user.firstName})
             }
             else if(siteEngineer){
-                res.render('Admin/dashboard/index_site_engineer', {layout: "layout/admin3", user:user, name:user.firstName})
+                res.render('Admin/dashboard/index_site_engineer', {layout: "layout/admin3", user:user,all_urgent_records: all_records, name:user.firstName})
             }
             else if(permanentSecretary){
-                res.render('Admin/dashboard/index_permanent_secretary', {layout: "layout/admin3", user:user, name:user.firstName})
+                res.render('Admin/dashboard/index_permanent_secretary', {layout: "layout/admin3", user:user,all_urgent_records: all_records, name:user.firstName})
             }
             else if(minister){
-                res.render('Admin/dashboard/index_minister', {layout: "layout/admin3", user:user, name:user.firstName})
+                res.render('Admin/dashboard/index_minister', {layout: "layout/admin3", user:user,all_urgent_records: all_records, name:user.firstName})
             }
             else if(director){
-                res.render('Admin/dashboard/index_director', {layout: "layout/admin3", user:user, name:user.firstName})
+                res.render('Admin/dashboard/index_director', {layout: "layout/admin3", user:user,all_urgent_records: all_records, name:user.firstName})
             }
-          
+            })
         })
     }
 
@@ -98,7 +113,7 @@ exports.success_type = function(req, res) {
 }
 
 exports.success_component = function(req, res) {
-    res.render('Admin/dashboard/success_component', {layout: "layout/admin3"})
+    res.render('Admin/dashboard/success_component', {layout: false})
 }
 
 

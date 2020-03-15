@@ -6,7 +6,11 @@ const iv = crypto.randomBytes(16);
 import User from '../models/User/user';
 import {encrypt, decrypt} from './encryptor'
 
-
+exports.percentager = (count, total, projectLength) => {
+    let supposedTotal = projectLength*count
+    return (total/supposedTotal)*100
+}
+exports.reducer = (accumulator, currentValue) => accumulator + currentValue;
 exports.encrypt = (text) => {
  let cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(key), iv);
  let encrypted = cipher.update(text);
