@@ -17,9 +17,12 @@ router.route('/api/datasheet_select')
 router.route('/api/inspection_datasheet/:id')
     .get(ApiController.create_inspection_data_sheet)
 
+router.route('/create_completed_datasheet/:name/:project_type')
+    .get(ApiController.create_completed_datasheet)
+
 router.route('/api/edit_single_component')
     .post(ApiController.edit_single_component)
-    
+
 router.route('/')
     .get(AdminDashboardController.home)
 
@@ -141,6 +144,7 @@ router.route('/get_contract_datas/:contract_id')
 
 router.route('/inspection_report/:id/:datasheet_id')
     .get(AuthDashboard.inspection_report)
+
 
 
 router.route('/completed_datasheet_inspection_type/:id/:project_type')

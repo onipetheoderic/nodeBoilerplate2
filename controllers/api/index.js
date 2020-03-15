@@ -154,6 +154,37 @@ exports.create_inspection_data_sheet = function(req, res){
     }
 }
 
+//completed_road, completed_bridge
+//create_completed_datasheet/name/project_type
+exports.create_completed_datasheet = function(req, res) {
+    const headers = req.headers['authorization']
+    console.log("heeeeee", headers)
+    if(headers!=undefined){
+        const splitted_head = splitter(headers)
+        const user_id = decoder(splitted_head)
+        let datasheet = new Datasheet();
+        datasheet.name = req.params.name
+        datasheet.highway_inspector_id = user_id
+        datasheet.project_type = req.params.project_type
+        datasheet.save(function(err, datasheet_details){       
+            if(err){
+                console.log(err)
+                return;
+            } else { 
+                Component.find({inspection_type_id:req.params.project_type}, 'id name inspection_type_id', function(err, components){
+                    res.json(components)
+                })
+            }
+        });
+    }
+    else {
+        res.status(422);
+        res.json({success:false, message:"unauthorized"})
+    }
+    
+}
+
+
 //accepts both datacomponentid as id, and dataComponentValue as score
 exports.edit_single_component = function(req, res){
     const headers = req.headers['authorization']
